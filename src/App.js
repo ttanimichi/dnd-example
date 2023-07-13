@@ -1,35 +1,54 @@
 import React, { useState } from "react";
-import { DndContext } from "@dnd-kit/core";
+import {
+  DndContext,
+  closestCenter,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+} from "@dnd-kit/core";
+import {
+  arrayMove,
+  SortableContext,
+  sortableKeyboardCoordinates,
+  verticalListSortingStrategy,
+} from "@dnd-kit/sortable";
 
-import { Droppable } from "./Droppable";
-import { Draggable } from "./Draggable";
+import { SortableItem } from "./SortableItem";
 
 export default function App() {
-  const containers = ["A", "B", "C"];
-  const [parent, setParent] = useState(null);
-  const draggableMarkup = <Draggable id="draggable">Drag me</Draggable>;
+  const [items, setItems] = useState([1, 2, 3]);
+  const sensors = useSensors(
+    useSensor(PointerSensor),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    })
+  );
 
   return (
-    <DndContext onDragEnd={handleDragEnd}>
-      {`parent is ${parent}`}
-
-      {parent === null ? draggableMarkup : null}
-
-      {containers.map((id) => (
-        // We updated the Droppable component so it would accept an `id`
-        // prop and pass it to `useDroppable`
-        <Droppable key={id} id={id}>
-          {parent === id ? draggableMarkup : "Drop here"}
-        </Droppable>
-      ))}
+    <DndContext
+      sensors={sensors}
+      collisionDetection={closestCenter}
+      onDragEnd={handleDragEnd}
+    >
+      <SortableContext items={items} strategy={verticalListSortingStrategy}>
+        {items.map((id) => (
+          <SortableItem key={id} id={id} />
+        ))}
+      </SortableContext>
     </DndContext>
   );
 
   function handleDragEnd(event) {
-    const { over } = event;
+    const { active, over } = event;
 
-    // If the item is dropped over a container, set it as the parent
-    // otherwise reset the parent to `null`
-    setParent(over ? over.id : null);
+    if (active.id !== over.id) {
+      setItems((items) => {
+        const oldIndex = items.indexOf(active.id);
+        const newIndex = items.indexOf(over.id);
+
+        return arrayMove(items, oldIndex, newIndex);
+      });
+    }
   }
 }
