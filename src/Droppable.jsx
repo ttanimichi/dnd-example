@@ -6,10 +6,12 @@ export function Droppable(props) {
     id: props.id,
   });
   const style = {
-    color: isOver ? 'green' : undefined,
+    backgroundColor: isOver ? 'aqua' : undefined,
+    paddingTop: 10,
+    paddingLeft: 10,
+    paddingRight: 10,
   };
-  
-  
+    
   return (
     <div ref={setNodeRef} style={style}>
       {props.children}
