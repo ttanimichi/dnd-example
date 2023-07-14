@@ -18,7 +18,9 @@ export function SortableItem(props) {
   
   return (
     <div ref={setNodeRef} style={style} {...attributes} {...listeners}>
-      {`id: ${props.id}`}
+      <div style={{ backgroundColor: 'lightgreen', width: 300, margin: 10 }}>
+        {`id: ${props.id}`}
+      </div>    
     </div>
   );
 }
