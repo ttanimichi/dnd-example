@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import { DndContext } from "@dnd-kit/core";
-
 import { Droppable } from "./Droppable";
-import { Draggable } from "./Draggable";
+import Employee from "./Employee";
 
 export default function App() {
   const containers = ["人事部", "総務部", "営業部"];
@@ -12,24 +11,6 @@ export default function App() {
     営業部: new Set([5, 6]),
   });
 
-  const droppable = (id, name) => (
-    <div key={id} style={{ paddingBottom: 10 }}>
-      <Draggable id={`employee${id}`}>
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            border: "1px solid grey",
-          }}
-        >
-          <img src={`/face/${id}.png`} alt="" width="50" />
-          <span style={{ width: 10 }} />
-          <span>{name}</span>
-        </div>
-      </Draggable>
-    </div>
-  );
-
   const employees = [
     "松山 望結 (グレードC, 人月1.0)",
     "木村 乃蒼 (グレードA, 人月0.6)",
@@ -37,7 +18,7 @@ export default function App() {
     "徳田 泰人 (グレードB, 人月0.8)",
     "浅野 和聖 (グレードC, 人月0.8)",
     "黒木 波映 (グレードB, 人月1.0)",
-  ].map((name, index) => droppable(index + 1, name));
+  ].map((name, index) => <Employee id={index + 1} name={name} />);
 
   const Members = ({ id }) => {
     return <>{[...departments[id]].map((id) => employees[id - 1])}</>;
