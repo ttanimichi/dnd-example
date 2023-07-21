@@ -4,7 +4,6 @@ import Employee from "./Employee";
 import Department from "./Department";
 
 export default function App() {
-  const containers = ["人事部", "総務部", "営業部"];
   const [departments, setDepartments] = useState({
     人事部: new Set([1, 2, 3]),
     総務部: new Set([4]),
@@ -18,12 +17,15 @@ export default function App() {
     "徳田 泰人 (グレードB, 人月0.8)",
     "浅野 和聖 (グレードC, 人月0.8)",
     "黒木 波映 (グレードB, 人月1.0)",
-  ].map((name, index) => <Employee id={index + 1} name={name} />);
+  ].map((name, index) => (
+    <Employee key={index + 1} id={index + 1} name={name} />
+  ));
 
   return (
     <DndContext onDragEnd={handleDragEnd}>
-      {containers.map((deptName) => (
+      {Object.keys(departments).map((deptName, index) => (
         <Department
+          key={index}
           deptName={deptName}
           employees={[...departments[deptName]].map((id) => employees[id - 1])}
         />
@@ -35,11 +37,11 @@ export default function App() {
     const { over, active } = event;
     const activeId = parseInt(active.id.match(/\d+/)[0], 10);
 
-    setDepartments((departments) => {
-      const newDepartments = { ...departments };
-      departments.人事部.delete(activeId);
-      departments.総務部.delete(activeId);
-      departments.営業部.delete(activeId);
+    setDepartments((prevDepartments) => {
+      const newDepartments = { ...prevDepartments };
+      Object.keys(newDepartments).forEach((deptName) =>
+        newDepartments[deptName].delete(activeId)
+      );
       newDepartments[over.id].add(activeId);
       return newDepartments;
     });
