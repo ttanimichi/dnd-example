@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { DndContext } from "@dnd-kit/core";
-import { Droppable } from "./Droppable";
 import Employee from "./Employee";
+import Department from "./Department";
 
 export default function App() {
   const containers = ["人事部", "総務部", "営業部"];
@@ -20,34 +20,13 @@ export default function App() {
     "黒木 波映 (グレードB, 人月1.0)",
   ].map((name, index) => <Employee id={index + 1} name={name} />);
 
-  const Members = ({ id }) => {
-    return <>{[...departments[id]].map((id) => employees[id - 1])}</>;
-  };
-
   return (
     <DndContext onDragEnd={handleDragEnd}>
-      {containers.map((id) => (
-        <div
-          style={{
-            margin: "20px",
-            border: "1px solid grey",
-            width: "400px",
-          }}
-          key={id}
-        >
-          <div
-            style={{
-              borderBottom: "1px solid grey",
-              padding: 10,
-              backgroundColor: "lightgrey",
-            }}
-          >
-            {id}
-          </div>
-          <Droppable key={id} id={id}>
-            <Members id={id} />
-          </Droppable>
-        </div>
+      {containers.map((deptName) => (
+        <Department
+          deptName={deptName}
+          employees={[...departments[deptName]].map((id) => employees[id - 1])}
+        />
       ))}
     </DndContext>
   );
