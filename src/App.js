@@ -7,27 +7,32 @@ const defaultDepartments = [
   {
     id: 11,
     name: "株式会社イグザンプル",
+    managers: new Set([]),
     memberSet: new Set([22]),
     children: [
       {
         id: 6,
         name: "管理本部",
+        managers: new Set([23]),
         memberSet: new Set([16]),
         children: [
           {
             id: 1,
             name: "人事部",
+            managers: new Set([24]),
             memberSet: new Set([1, 2, 3]),
             children: [
               {
                 id: 2,
                 name: "労務課",
+                managers: new Set([25]),
                 memberSet: new Set([7, 8]),
                 children: [],
               },
               {
                 id: 3,
                 name: "採用課",
+                managers: new Set([26]),
                 memberSet: new Set([9, 10]),
                 children: [],
               },
@@ -36,6 +41,7 @@ const defaultDepartments = [
           {
             id: 4,
             name: "総務部",
+            managers: new Set([27]),
             memberSet: new Set([4, 13]),
             children: [],
           },
@@ -44,22 +50,26 @@ const defaultDepartments = [
       {
         id: 7,
         name: "営業本部",
+        managers: new Set([28]),
         memberSet: new Set([14, 15]),
         children: [
           {
             id: 5,
             name: "営業第一部",
+            managers: new Set([29]),
             memberSet: new Set([5, 6, 21]),
             children: [
               {
                 id: 9,
                 name: "法人営業課",
+                managers: new Set([30]),
                 memberSet: new Set([17, 18]),
                 children: [],
               },
               {
                 id: 10,
                 name: "新規営業課",
+                managers: new Set([31]),
                 memberSet: new Set([19, 20]),
                 children: [],
               },
@@ -68,6 +78,7 @@ const defaultDepartments = [
           {
             id: 8,
             name: "営業第二部",
+            managers: new Set([32]),
             memberSet: new Set([11, 12]),
             children: [],
           },
@@ -76,6 +87,10 @@ const defaultDepartments = [
     ],
   },
 ];
+
+const noDataFound = (
+  <div style={{ paddingTop: 10, paddingBottom: 10 }}>データがありません</div>
+);
 
 export default function App() {
   const [departments, setDepartments] = useState(defaultDepartments);
@@ -103,6 +118,16 @@ export default function App() {
     "松本 健太(グレードA, 人月0.8)",
     "山田 太郎(グレードB, 人月0.8)",
     "藤原 拓哉(グレードC, 人月0.8)",
+    "鈴木 一郎(グレードA, 人月0.8)",
+    "高橋 二郎(グレードB, 人月0.8)",
+    "田中 三郎(グレードC, 人月0.8)",
+    "伊藤 四郎(グレードA, 人月0.8)",
+    "渡辺 五郎(グレードB, 人月0.8)",
+    "山本 結衣(グレードC, 人月0.8)",
+    "中村 美咲(グレードA, 人月0.8)",
+    "小川 美保(グレードB, 人月0.8)",
+    "加藤 健太(グレードC, 人月0.8)",
+    "吉田 太郎(グレードA, 人月0.8)",
   ].map((name, index) => (
     <Employee key={index + 1} id={index + 1} name={name} />
   ));
@@ -110,18 +135,20 @@ export default function App() {
   return (
     <DndContext onDragEnd={handleDragEnd}>
       <div style={{ marginLeft: 20 }}>{departments.map(renderDepartment)}</div>
+      <div style={{ height: 100 }}></div>
     </DndContext>
   );
 
   function renderDepartment(department) {
-    let deptMembers = (
-      <div style={{ paddingTop: 10, paddingBottom: 20 }}>
-        データがありません
-      </div>
-    );
+    const deptMembers =
+      department.memberSet.size > 0
+        ? [...department.memberSet].map((id) => employees[id - 1])
+        : noDataFound;
 
-    if (department.memberSet.size > 0)
-      deptMembers = [...department.memberSet].map((id) => employees[id - 1]);
+    const deptManagers =
+      department.managers.size > 0
+        ? [...department.managers].map((id) => employees[id - 1])
+        : noDataFound;
 
     return (
       <div
@@ -131,7 +158,8 @@ export default function App() {
         <Department
           id={department.id}
           deptName={department.name}
-          employees={deptMembers}
+          managers={deptManagers}
+          members={deptMembers}
         />
         <div>{department.children.map(renderDepartment)}</div>
       </div>
@@ -140,11 +168,12 @@ export default function App() {
 
   function handleDragEnd(event) {
     const { over, active } = event;
+
     const activeId = parseInt(active.id.match(/\d+/)[0], 10);
     setDepartments((prevDepartments) => {
       const newDepartments = structuredClone(prevDepartments);
       removeMember(newDepartments, activeId);
-      addMember(newDepartments, parseInt(over.id), activeId);
+      addMember(newDepartments, over.id, activeId);
       return newDepartments;
     });
   }
@@ -152,17 +181,27 @@ export default function App() {
 
 function removeMember(depts, memberId) {
   depts.forEach((dept) => {
+    dept.managers.delete(memberId);
     dept.memberSet.delete(memberId);
     removeMember(dept.children, memberId);
   });
 }
 
-function addMember(depts, deptId, memberId) {
+function addMember(depts, overId, memberId) {
+  if (typeof overId !== "string" || !overId.includes("-")) return;
+
+  const type = overId.split("-")[0];
+  const deptId = overId.split("-")[1];
+
   depts.forEach((dept) => {
-    if (dept.id === deptId) {
-      dept.memberSet.add(memberId);
+    if (dept.id === parseInt(deptId, 10)) {
+      if (type === "managers") {
+        dept.managers.add(memberId);
+      } else {
+        dept.memberSet.add(memberId);
+      }
     } else if (dept.children.length > 0) {
-      addMember(dept.children, deptId, memberId);
+      addMember(dept.children, overId, memberId);
     }
   });
 }

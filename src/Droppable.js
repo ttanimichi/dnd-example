@@ -7,7 +7,6 @@ export function Droppable(props) {
   });
   const style = {
     backgroundColor: isOver ? "aqua" : undefined,
-    paddingTop: 10,
     paddingLeft: 10,
     paddingRight: 10,
   };

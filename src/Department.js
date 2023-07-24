@@ -1,7 +1,7 @@
 import React from "react";
 import { Droppable } from "./Droppable";
 
-export default function Department({ id, deptName, employees }) {
+export default function Department({ id, deptName, managers, members }) {
   return (
     <div
       style={{
@@ -21,9 +21,17 @@ export default function Department({ id, deptName, employees }) {
       >
         {deptName}
       </div>
-      <Droppable key={id} id={id}>
-        {employees}
-      </Droppable>
+      <div>
+        <Droppable key={`managers-${id}`} id={`managers-${id}`}>
+          <div style={{ paddingTop: 10, paddingBottom: 10 }}>部門長</div>
+          {managers}
+        </Droppable>
+        <hr style={{ margin: 0 }} />
+        <Droppable key={`members-${id}`} id={`members-${id}`}>
+          <div style={{ paddingTop: 10, paddingBottom: 10 }}>メンバー</div>
+          {members}
+        </Droppable>
+      </div>
     </div>
   );
 }
