@@ -114,6 +114,15 @@ export default function App() {
   );
 
   function renderDepartment(department) {
+    let deptMembers = (
+      <div style={{ paddingTop: 10, paddingBottom: 20 }}>
+        データがありません
+      </div>
+    );
+
+    if (department.memberSet.size > 0)
+      deptMembers = [...department.memberSet].map((id) => employees[id - 1]);
+
     return (
       <div
         key={department.id}
@@ -122,7 +131,7 @@ export default function App() {
         <Department
           id={department.id}
           deptName={department.name}
-          employees={[...department.memberSet].map((id) => employees[id - 1])}
+          employees={deptMembers}
         />
         <div>{department.children.map(renderDepartment)}</div>
       </div>
