@@ -5,35 +5,68 @@ import Department from "./Department";
 
 const defaultDepartments = [
   {
-    id: 1,
-    name: "人事部",
-    memberSet: new Set([1, 2, 3]),
+    id: 6,
+    name: "管理本部",
+    memberSet: new Set([16]),
     children: [
       {
-        id: 2,
-        name: "労務課",
-        memberSet: new Set([7, 8]),
-        children: [],
+        id: 1,
+        name: "人事部",
+        memberSet: new Set([1, 2, 3]),
+        children: [
+          {
+            id: 2,
+            name: "労務課",
+            memberSet: new Set([7, 8]),
+            children: [],
+          },
+          {
+            id: 3,
+            name: "採用課",
+            memberSet: new Set([9, 10]),
+            children: [],
+          },
+        ],
       },
       {
-        id: 3,
-        name: "採用課",
-        memberSet: new Set([9, 10]),
+        id: 4,
+        name: "総務部",
+        memberSet: new Set([4, 13]),
         children: [],
       },
     ],
   },
   {
-    id: 4,
-    name: "総務部",
-    memberSet: new Set([4]),
-    children: [],
-  },
-  {
-    id: 5,
-    name: "営業部",
-    memberSet: new Set([5, 6]),
-    children: [],
+    id: 7,
+    name: "営業本部",
+    memberSet: new Set([14, 15]),
+    children: [
+      {
+        id: 5,
+        name: "営業第一部",
+        memberSet: new Set([5, 6, 21]),
+        children: [
+          {
+            id: 9,
+            name: "法人営業課",
+            memberSet: new Set([17, 18]),
+            children: [],
+          },
+          {
+            id: 10,
+            name: "新規営業課",
+            memberSet: new Set([19, 20]),
+            children: [],
+          },
+        ],
+      },
+      {
+        id: 8,
+        name: "営業第二部",
+        memberSet: new Set([11, 12]),
+        children: [],
+      },
+    ],
   },
 ];
 
@@ -51,6 +84,17 @@ export default function App() {
     "鈴木 由美(グレードB, 人月0.9)",
     "山田 裕二(グレードC, 人月0.8)",
     "佐藤 英二(グレードA, 人月0.8)",
+    "小林 瑠衣(グレードC, 人月0.8)",
+    "高橋 一郎(グレードB, 人月0.8)",
+    "伊藤 二郎(グレードC, 人月0.8)",
+    "山本 三郎(グレードA, 人月0.8)",
+    "中村 四郎(グレードB, 人月0.8)",
+    "小川 五郎(グレードC, 人月0.8)",
+    "加藤 結衣(グレードA, 人月0.8)",
+    "吉田 美咲(グレードB, 人月0.8)",
+    "山口 美保(グレードC, 人月0.8)",
+    "松本 健太(グレードA, 人月0.8)",
+    "山田 太郎(グレードB, 人月0.8)",
   ].map((name, index) => (
     <Employee key={index + 1} id={index + 1} name={name} />
   ));
