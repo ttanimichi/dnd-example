@@ -5,7 +5,7 @@ import Department from "./Department";
 
 const defaultDepartments = [
   {
-    id: 11,
+    id: 0,
     name: "株式会社イグザンプル",
     managers: new Set([]),
     memberSet: new Set([22]),
