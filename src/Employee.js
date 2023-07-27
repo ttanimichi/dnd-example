@@ -4,7 +4,7 @@ import { Draggable } from "./Draggable";
 export default function Employee({ id, name }) {
   return (
     <div key={id} style={{ paddingBottom: 10 }}>
-      <Draggable id={`employee${id}`}>
+      <Draggable id={`drag-employee-${id}`} data={{ type: "employee" }}>
         <div
           style={{
             display: "flex",

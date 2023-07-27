@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { DndContext } from "@dnd-kit/core";
 import Employee from "./Employee";
 import Department from "./Department";
+import TargetContext from "./TargetContext";
+import SetTargetContext from "./setTargetContext";
 
 const defaultDepartments = [
   {
@@ -12,26 +14,26 @@ const defaultDepartments = [
     children: [
       {
         id: 6,
-        name: "管理本部",
+        name: "管理",
         managers: new Set([23]),
         memberSet: new Set([16]),
         children: [
           {
             id: 1,
-            name: "人事部",
+            name: "人事",
             managers: new Set([24]),
             memberSet: new Set([1, 2, 3]),
             children: [
               {
                 id: 2,
-                name: "労務課",
+                name: "労務",
                 managers: new Set([25]),
                 memberSet: new Set([7, 8]),
                 children: [],
               },
               {
                 id: 3,
-                name: "採用課",
+                name: "採用",
                 managers: new Set([26]),
                 memberSet: new Set([9, 10]),
                 children: [],
@@ -40,7 +42,7 @@ const defaultDepartments = [
           },
           {
             id: 4,
-            name: "総務部",
+            name: "総務",
             managers: new Set([27]),
             memberSet: new Set([4, 13]),
             children: [],
@@ -49,26 +51,26 @@ const defaultDepartments = [
       },
       {
         id: 7,
-        name: "営業本部",
+        name: "営業",
         managers: new Set([28]),
         memberSet: new Set([14, 15]),
         children: [
           {
             id: 5,
-            name: "営業第一部",
+            name: "営業第一",
             managers: new Set([29]),
             memberSet: new Set([5, 6, 21]),
             children: [
               {
                 id: 9,
-                name: "法人営業課",
+                name: "法人営業",
                 managers: new Set([30]),
                 memberSet: new Set([17, 18]),
                 children: [],
               },
               {
                 id: 10,
-                name: "新規営業課",
+                name: "新規営業",
                 managers: new Set([31]),
                 memberSet: new Set([19, 20]),
                 children: [],
@@ -77,7 +79,7 @@ const defaultDepartments = [
           },
           {
             id: 8,
-            name: "営業第二部",
+            name: "営業第二",
             managers: new Set([32]),
             memberSet: new Set([11, 12]),
             children: [],
@@ -88,12 +90,25 @@ const defaultDepartments = [
   },
 ];
 
+function updateLevel(depts, level = 0) {
+  return depts.map((dept) => {
+    dept.level = level;
+    if (dept.children && dept.children.length > 0) {
+      dept.children = updateLevel(dept.children, level + 1);
+    }
+    return dept;
+  });
+}
+
 const noDataFound = (
   <div style={{ paddingTop: 10, paddingBottom: 10 }}>データがありません</div>
 );
 
 export default function App() {
-  const [departments, setDepartments] = useState(defaultDepartments);
+  const [departments, setDepartments] = useState(
+    updateLevel(defaultDepartments)
+  );
+  const [target, setTarget] = useState(null);
 
   const employees = [
     "松山 望結 (グレードC, 人月1.0)",
@@ -133,9 +148,15 @@ export default function App() {
   ));
 
   return (
-    <DndContext onDragEnd={handleDragEnd}>
-      <div style={{ marginLeft: 20 }}>{departments.map(renderDepartment)}</div>
-      <div style={{ height: 100 }}></div>
+    <DndContext onDragEnd={handleDragEnd} onDragStart={handleDragStart}>
+      <TargetContext.Provider value={target}>
+        <SetTargetContext.Provider value={setTarget}>
+          <div style={{ marginLeft: 20 }}>
+            {departments.map(renderDepartment)}
+          </div>
+          <div style={{ height: 100 }}></div>
+        </SetTargetContext.Provider>
+      </TargetContext.Provider>
     </DndContext>
   );
 
@@ -158,6 +179,7 @@ export default function App() {
         <Department
           id={department.id}
           deptName={department.name}
+          level={department.level}
           managers={deptManagers}
           members={deptMembers}
         />
@@ -166,16 +188,85 @@ export default function App() {
     );
   }
 
+  function handleDragStart(event) {
+    const { active } = event;
+
+    if (!active) return;
+    setTarget(active.data.current.type);
+  }
+
   function handleDragEnd(event) {
     const { over, active } = event;
+    if (!over || !active) return;
 
     const activeId = parseInt(active.id.match(/\d+/)[0], 10);
+    const overId = parseInt(over.id.match(/\d+/)[0], 10);
+
     setDepartments((prevDepartments) => {
       const newDepartments = structuredClone(prevDepartments);
-      removeMember(newDepartments, activeId);
-      addMember(newDepartments, over.id, activeId);
+      if (target === "employee") {
+        removeMember(newDepartments, activeId);
+        addMember(newDepartments, over.id, activeId);
+      } else if (target === "dept") {
+        // 循環参照を防止
+        if (!isDescendant(newDepartments, activeId, overId)) {
+          const removed = removeById(newDepartments, activeId);
+          addToChildrenById(newDepartments, overId, removed);
+          updateLevel(newDepartments);
+        }
+      }
       return newDepartments;
     });
+  }
+}
+
+function isDescendant(depts, parentId, childId) {
+  const subTree = removeById(structuredClone(depts), parentId);
+  return isDescendantSubTree(subTree, childId);
+}
+
+function isDescendantSubTree(subTree, childId) {
+  if (subTree.id === childId) {
+    return true;
+  }
+
+  if (subTree.children && subTree.children.length > 0) {
+    for (let i = 0; i < subTree.children.length; i++) {
+      if (isDescendantSubTree(subTree.children[i], childId)) {
+        return true;
+      }
+    }
+  }
+
+  return false;
+}
+
+function removeById(depts, idToRemove) {
+  for (let i = 0; i < depts.length; i++) {
+    if (depts[i].id === idToRemove) {
+      const removed = depts.splice(i, 1);
+      return removed[0];
+    }
+
+    if (depts[i].children && depts[i].children.length > 0) {
+      const removed = removeById(depts[i].children, idToRemove);
+      if (removed) {
+        return removed;
+      }
+    }
+  }
+}
+
+function addToChildrenById(depts, id, value) {
+  for (let i = 0; i < depts.length; i++) {
+    if (depts[i].id === id) {
+      depts[i].children.push(value);
+      return;
+    }
+
+    if (depts[i].children && depts[i].children.length > 0) {
+      addToChildrenById(depts[i].children, id, value);
+    }
   }
 }
 
