@@ -2,6 +2,7 @@ import React, { useContext } from "react";
 import { Droppable } from "./Droppable";
 import { Draggable } from "./Draggable";
 import TargetContext from "./TargetContext";
+import DeptMenu from "./DeptMenu";
 
 export default function Department({ id, deptName, level, managers, members }) {
   const target = useContext(TargetContext);
@@ -44,10 +45,13 @@ export default function Department({ id, deptName, level, managers, members }) {
             style={{
               borderBottom: "1px solid grey",
               padding: 10,
-              backgroundColor: "lightgrey",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
             }}
           >
-            {`${deptName}${suffix}`}
+            <div>{`${deptName}${suffix}`}</div>
+            <DeptMenu />
           </div>
           <div>
             {id === 0 ? (

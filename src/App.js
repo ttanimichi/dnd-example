@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { DndContext } from "@dnd-kit/core";
+import { DndContext, useSensor, useSensors, MouseSensor } from "@dnd-kit/core";
 import Employee from "./Employee";
 import Department from "./Department";
 import TargetContext from "./TargetContext";
@@ -147,8 +147,16 @@ export default function App() {
     <Employee key={index + 1} id={index + 1} name={name} />
   ));
 
+  const sensors = useSensors(
+    useSensor(MouseSensor, { activationConstraint: { distance: 3 } })
+  );
+
   return (
-    <DndContext onDragEnd={handleDragEnd} onDragStart={handleDragStart}>
+    <DndContext
+      onDragEnd={handleDragEnd}
+      onDragStart={handleDragStart}
+      sensors={sensors}
+    >
       <TargetContext.Provider value={target}>
         <SetTargetContext.Provider value={setTarget}>
           <div style={{ marginLeft: 20 }}>
