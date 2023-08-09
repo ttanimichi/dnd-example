@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { DndContext } from "@dnd-kit/core";
+import { DndContext, useSensor, useSensors, MouseSensor } from "@dnd-kit/core";
 import Employee from "./Employee";
 import Department from "./Department";
 import TargetContext from "./TargetContext";
@@ -28,7 +28,7 @@ const defaultDepartments = [
                 id: 2,
                 name: "労務",
                 managers: new Set([25]),
-                memberSet: new Set([7, 8]),
+                memberSet: new Set([7, 8, 33]),
                 children: [],
               },
               {
@@ -110,6 +110,10 @@ export default function App() {
   );
   const [target, setTarget] = useState(null);
 
+  const sensors = useSensors(
+    useSensor(MouseSensor, { activationConstraint: { distance: 3 } })
+  );
+
   const employees = [
     "松山 望結 (グレードC, 人月1.0)",
     "木村 乃蒼 (グレードA, 人月0.6)",
@@ -143,12 +147,17 @@ export default function App() {
     "小川 美保(グレードB, 人月0.8)",
     "加藤 健太(グレードC, 人月0.8)",
     "吉田 太郎(グレードA, 人月0.8)",
+    "新入社員(グレードE, 人月01.0)",
   ].map((name, index) => (
     <Employee key={index + 1} id={index + 1} name={name} />
   ));
 
   return (
-    <DndContext onDragEnd={handleDragEnd} onDragStart={handleDragStart}>
+    <DndContext
+      onDragEnd={handleDragEnd}
+      onDragStart={handleDragStart}
+      sensors={sensors}
+    >
       <TargetContext.Provider value={target}>
         <SetTargetContext.Provider value={setTarget}>
           <div style={{ marginLeft: 20 }}>
