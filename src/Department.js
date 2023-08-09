@@ -1,9 +1,13 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { Droppable } from "./Droppable";
 import { Draggable } from "./Draggable";
 import TargetContext from "./TargetContext";
 
+import "rsuite/dist/rsuite.min.css";
+import { Dropdown } from "rsuite";
+
 export default function Department({ id, deptName, level, managers, members }) {
+  const [flag, setFlag] = useState(false);
   const target = useContext(TargetContext);
 
   let suffix = "";
@@ -44,10 +48,29 @@ export default function Department({ id, deptName, level, managers, members }) {
             style={{
               borderBottom: "1px solid grey",
               padding: 10,
-              backgroundColor: "lightgrey",
             }}
           >
-            {`${deptName}${suffix}`}
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+              }}
+            >
+              <div>{`${deptName}${suffix}`}</div>
+              <Dropdown title="編集">
+                <Dropdown.Item
+                  onClick={() => {
+                    console.log("採用（中途）");
+                    setFlag(true);
+                  }}
+                >
+                  採用（中途）
+                </Dropdown.Item>
+                <Dropdown.Item>採用（障害者）</Dropdown.Item>
+                <Dropdown.Item>採用（新卒）</Dropdown.Item>
+              </Dropdown>
+            </div>
           </div>
           <div>
             {id === 0 ? (
@@ -82,7 +105,10 @@ export default function Department({ id, deptName, level, managers, members }) {
                   <div style={{ paddingTop: 10, paddingBottom: 10 }}>
                     メンバー
                   </div>
-                  {members}
+                  {members.filter((member) => {
+                    console.log(member);
+                    return flag === true || member.props.id < 33;
+                  })}
                 </Droppable>
               </>
             )}
