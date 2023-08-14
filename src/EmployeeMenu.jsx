@@ -3,7 +3,7 @@ import Button from "@mui/material/Button";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 
-export default function DeptMenu() {
+export default function EmployeeMenu() {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -34,12 +34,11 @@ export default function DeptMenu() {
           "aria-labelledby": "basic-button",
         }}
       >
-        <MenuItem onClick={handleClose}>採用（中途）</MenuItem>
-        <MenuItem onClick={handleClose}>採用（新卒）</MenuItem>
-        <MenuItem onClick={handleClose}>採用（障害者）</MenuItem>
-        <MenuItem onClick={handleClose}>この部署を廃止</MenuItem>
-        <MenuItem onClick={handleClose}>部署名を編集</MenuItem>
-        <MenuItem onClick={handleClose}>直下に部署を追加</MenuItem>
+        <MenuItem onClick={handleClose}>昇格</MenuItem>
+        <MenuItem onClick={handleClose}>降格</MenuItem>
+        <MenuItem onClick={handleClose}>退職</MenuItem>
+        <MenuItem onClick={handleClose}>休職</MenuItem>
+        <MenuItem onClick={handleClose}>複製（兼任用）</MenuItem>
       </Menu>
     </div>
   );

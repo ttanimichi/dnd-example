@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import { useContext } from "react";
 import { Droppable } from "./Droppable";
 import { Draggable } from "./Draggable";
 import TargetContext from "./TargetContext";
@@ -34,10 +34,10 @@ export default function Department({ id, deptName, level, managers, members }) {
       >
         <div
           style={{
-            marginRight: 20,
+            marginRight: 10,
             marginTop: 20,
             border: "1px solid grey",
-            width: "320px",
+            width: "360px",
           }}
           key={deptName}
         >
