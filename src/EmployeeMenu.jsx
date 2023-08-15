@@ -2,6 +2,7 @@ import * as React from "react";
 import Button from "@mui/material/Button";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
+import EmployeeInfoFormDialog from "./EmployeeInfoFormDialog.jsx";
 
 export default function EmployeeMenu() {
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -12,6 +13,8 @@ export default function EmployeeMenu() {
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+  const [dialogOpen, setDialogOpen] = React.useState(false);
 
   return (
     <div>
@@ -34,12 +37,19 @@ export default function EmployeeMenu() {
           "aria-labelledby": "basic-button",
         }}
       >
-        <MenuItem onClick={handleClose}>グレードを編集</MenuItem>
-        <MenuItem onClick={handleClose}>人月を編集</MenuItem>
+        <MenuItem
+          onClick={() => {
+            setDialogOpen(true);
+            handleClose();
+          }}
+        >
+          従業員情報を編集
+        </MenuItem>
         <MenuItem onClick={handleClose}>退職</MenuItem>
         <MenuItem onClick={handleClose}>休職</MenuItem>
         <MenuItem onClick={handleClose}>複製（兼任用）</MenuItem>
       </Menu>
+      <EmployeeInfoFormDialog open={dialogOpen} setOpen={setDialogOpen} />
     </div>
   );
 }
