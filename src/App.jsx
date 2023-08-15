@@ -4,6 +4,7 @@ import Employee from "./Employee";
 import Department from "./Department";
 import TargetContext from "./TargetContext";
 import SetTargetContext from "./setTargetContext";
+import Header from "./Header";
 
 const defaultDepartments = [
   {
@@ -152,20 +153,23 @@ export default function App() {
   );
 
   return (
-    <DndContext
-      onDragEnd={handleDragEnd}
-      onDragStart={handleDragStart}
-      sensors={sensors}
-    >
-      <TargetContext.Provider value={target}>
-        <SetTargetContext.Provider value={setTarget}>
-          <div style={{ marginLeft: 20 }}>
-            {departments.map(renderDepartment)}
-          </div>
-          <div style={{ height: 100 }}></div>
-        </SetTargetContext.Provider>
-      </TargetContext.Provider>
-    </DndContext>
+    <>
+      <Header />
+      <DndContext
+        onDragEnd={handleDragEnd}
+        onDragStart={handleDragStart}
+        sensors={sensors}
+      >
+        <TargetContext.Provider value={target}>
+          <SetTargetContext.Provider value={setTarget}>
+            <div style={{ marginLeft: 20 }}>
+              {departments.map(renderDepartment)}
+            </div>
+            <div style={{ height: 100 }}></div>
+          </SetTargetContext.Provider>
+        </TargetContext.Provider>
+      </DndContext>
+    </>
   );
 
   function renderDepartment(department) {
