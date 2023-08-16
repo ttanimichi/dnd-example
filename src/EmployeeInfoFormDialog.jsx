@@ -15,11 +15,11 @@ import Select from "@mui/material/Select";
 import Stack from "@mui/material/Stack";
 import Box from "@mui/material/Box";
 
-function GradeSelect() {
-  const [age, setAge] = React.useState("");
+import SetEmployeesContext from "./SetEmployeesContext";
 
+function GradeSelect({ grade, setGrade }) {
   const handleChange = (event) => {
-    setAge(event.target.value);
+    setGrade(event.target.value);
   };
 
   return (
@@ -28,30 +28,28 @@ function GradeSelect() {
       <Select
         labelId="demo-simple-select-label"
         id="demo-simple-select"
-        value={age}
+        value={grade}
         label="グレード"
         onChange={handleChange}
       >
-        <MenuItem value={10}>グレードA</MenuItem>
-        <MenuItem value={20}>グレードB</MenuItem>
-        <MenuItem value={30}>グレードC</MenuItem>
-        <MenuItem value={40}>グレードD</MenuItem>
-        <MenuItem value={50}>グレードE</MenuItem>
-        <MenuItem value={60}>グレードF</MenuItem>
-        <MenuItem value={70}>グレードG</MenuItem>
-        <MenuItem value={80}>アルバイト・パート</MenuItem>
-        <MenuItem value={90}>その他（出向など）</MenuItem>
-        <MenuItem value={100}>業務委託</MenuItem>
+        <MenuItem value={"グレードA"}>グレードA</MenuItem>
+        <MenuItem value={"グレードB"}>グレードB</MenuItem>
+        <MenuItem value={"グレードC"}>グレードC</MenuItem>
+        <MenuItem value={"グレードD"}>グレードD</MenuItem>
+        <MenuItem value={"グレードE"}>グレードE</MenuItem>
+        <MenuItem value={"グレードF"}>グレードF</MenuItem>
+        <MenuItem value={"グレードG"}>グレードG</MenuItem>
+        <MenuItem value={"アルバイト・パート"}>アルバイト・パート</MenuItem>
+        <MenuItem value={"その他（出向など）"}>その他（出向など）</MenuItem>
+        <MenuItem value={"業務委託"}>業務委託</MenuItem>
       </Select>
     </FormControl>
   );
 }
 
-function PersonMonthSelect() {
-  const [age, setAge] = React.useState("");
-
+function PersonMonthSelect({ personMonth, setPersonMonth }) {
   const handleChange = (event) => {
-    setAge(event.target.value);
+    setPersonMonth(event.target.value);
   };
 
   return (
@@ -60,28 +58,54 @@ function PersonMonthSelect() {
       <Select
         labelId="demo-simple-select-label"
         id="demo-simple-select"
-        value={age}
+        value={personMonth}
         label="人月"
         onChange={handleChange}
       >
-        <MenuItem value={10}>1.0</MenuItem>
-        <MenuItem value={20}>0.9</MenuItem>
-        <MenuItem value={30}>0.8</MenuItem>
-        <MenuItem value={40}>0.7</MenuItem>
-        <MenuItem value={50}>0.6</MenuItem>
-        <MenuItem value={60}>0.5</MenuItem>
-        <MenuItem value={70}>0.4</MenuItem>
-        <MenuItem value={80}>0.3</MenuItem>
-        <MenuItem value={90}>0.2</MenuItem>
-        <MenuItem value={100}>0.1</MenuItem>
-        <MenuItem value={110}>0.0</MenuItem>
+        <MenuItem value={"1.0"}>1.0</MenuItem>
+        <MenuItem value={"0.9"}>0.9</MenuItem>
+        <MenuItem value={"0.8"}>0.8</MenuItem>
+        <MenuItem value={"0.7"}>0.7</MenuItem>
+        <MenuItem value={"0.6"}>0.6</MenuItem>
+        <MenuItem value={"0.5"}>0.5</MenuItem>
+        <MenuItem value={"0.4"}>0.4</MenuItem>
+        <MenuItem value={"0.3"}>0.3</MenuItem>
+        <MenuItem value={"0.2"}>0.2</MenuItem>
+        <MenuItem value={"0.1"}>0.1</MenuItem>
+        <MenuItem value={"0.0"}>0.0</MenuItem>
       </Select>
     </FormControl>
   );
 }
 
-export default function EmployeeInfoFormDialog({ open, setOpen }) {
+export default function EmployeeInfoFormDialog({ open, setOpen, employee }) {
+  const setEmployees = React.useContext(SetEmployeesContext);
+
+  const [grade, setGrade] = React.useState(employee.grade);
+  const [personMonth, setPersonMonth] = React.useState(employee.personMonth);
+  const [name, setName] = React.useState(employee.name);
+
   const handleClose = () => {
+    setOpen(false);
+  };
+
+  const handleSave = () => {
+    setEmployees((prev) => {
+      const newEmployees = prev.map((e) => {
+        if (e.id === employee.id) {
+          return {
+            ...e,
+            grade: grade,
+            personMonth: personMonth,
+            name: name,
+          };
+        } else {
+          return e;
+        }
+      });
+      return newEmployees;
+    });
+
     setOpen(false);
   };
 
@@ -98,19 +122,26 @@ export default function EmployeeInfoFormDialog({ open, setOpen }) {
             <TextField
               autoFocus
               margin="dense"
-              id="name"
-              label="名前"
+              id="employeeName"
+              label="従業員名"
               type="text"
               fullWidth
               variant="standard"
+              value={name}
+              onChange={(event) => {
+                setName(event.target.value);
+              }}
             />
-            <GradeSelect />
-            <PersonMonthSelect />
+            <GradeSelect grade={grade} setGrade={setGrade} />
+            <PersonMonthSelect
+              personMonth={personMonth}
+              setPersonMonth={setPersonMonth}
+            />
           </Stack>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>キャンセル</Button>
-          <Button onClick={handleClose}>保存する</Button>
+          <Button onClick={handleSave}>保存する</Button>
         </DialogActions>
       </Dialog>
     </div>

@@ -3,7 +3,9 @@ import Chip from "@mui/material/Chip";
 import Stack from "@mui/material/Stack";
 import EmployeeMenu from "./EmployeeMenu";
 
-export default function Employee({ id, name }) {
+export default function Employee(props) {
+  const { id, name, grade, personMonth } = props;
+
   return (
     <div key={id} style={{ paddingBottom: 10 }}>
       <Draggable id={`drag-employee-${id}`} data={{ type: "employee" }}>
@@ -19,12 +21,12 @@ export default function Employee({ id, name }) {
           <Stack spacing={1} style={{ flex: 1 }}>
             <div style={{ fontWeight: "bold" }}>{name}</div>
             <Stack direction="row" spacing={1}>
-              <Chip label="グレードE" size="small" />
-              <Chip label="人月0.8" size="small" />
+              <Chip label={grade} size="small" />
+              <Chip label={`人月${personMonth}`} size="small" />
             </Stack>
           </Stack>
           <span style={{ width: 10 }} />
-          <EmployeeMenu />
+          <EmployeeMenu employee={props} />
           <span style={{ width: 10 }} />
         </div>
       </Draggable>

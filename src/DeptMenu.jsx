@@ -34,9 +34,7 @@ export default function DeptMenu() {
           "aria-labelledby": "basic-button",
         }}
       >
-        <MenuItem onClick={handleClose}>採用（中途）</MenuItem>
-        <MenuItem onClick={handleClose}>採用（新卒）</MenuItem>
-        <MenuItem onClick={handleClose}>採用（障害者）</MenuItem>
+        <MenuItem onClick={handleClose}>新入社員を追加</MenuItem>
         <MenuItem onClick={handleClose}>この部署を廃止</MenuItem>
         <MenuItem onClick={handleClose}>部署名を編集</MenuItem>
         <MenuItem onClick={handleClose}>直下に部署を追加</MenuItem>

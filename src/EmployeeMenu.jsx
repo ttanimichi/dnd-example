@@ -4,7 +4,7 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import EmployeeInfoFormDialog from "./EmployeeInfoFormDialog.jsx";
 
-export default function EmployeeMenu() {
+export default function EmployeeMenu({ employee }) {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -49,7 +49,11 @@ export default function EmployeeMenu() {
         <MenuItem onClick={handleClose}>休職</MenuItem>
         <MenuItem onClick={handleClose}>複製（兼任用）</MenuItem>
       </Menu>
-      <EmployeeInfoFormDialog open={dialogOpen} setOpen={setDialogOpen} />
+      <EmployeeInfoFormDialog
+        open={dialogOpen}
+        setOpen={setDialogOpen}
+        employee={employee}
+      />
     </div>
   );
 }

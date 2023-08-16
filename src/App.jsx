@@ -3,7 +3,8 @@ import { DndContext, useSensor, useSensors, MouseSensor } from "@dnd-kit/core";
 import Employee from "./Employee";
 import Department from "./Department";
 import TargetContext from "./TargetContext";
-import SetTargetContext from "./setTargetContext";
+import SetTargetContext from "./SetTargetContext";
+import SetEmployeesContext from "./SetEmployeesContext";
 import Header from "./Header";
 
 const defaultDepartments = [
@@ -91,6 +92,46 @@ const defaultDepartments = [
   },
 ];
 
+const defaultEmployees = [
+  "松山 望結",
+  "木村 乃蒼",
+  "奥田 光雄",
+  "徳田 泰人",
+  "浅野 和聖",
+  "黒木 波映",
+  "田中 彩花",
+  "鈴木 由美",
+  "山田 裕二",
+  "佐藤 英二",
+  "小林 瑠衣",
+  "高橋 一郎",
+  "伊藤 二郎",
+  "山本 三郎",
+  "中村 四郎",
+  "小川 五郎",
+  "加藤 結衣",
+  "吉田 美咲",
+  "山口 美保",
+  "松本 健太",
+  "山田 太郎",
+  "藤原 拓哉",
+  "鈴木 一郎",
+  "高橋 二郎",
+  "田中 三郎",
+  "伊藤 四郎",
+  "渡辺 五郎",
+  "山本 結衣",
+  "中村 美咲",
+  "小川 美保",
+  "加藤 健太",
+  "吉田 太郎",
+].map((name, index) => ({
+  id: index + 1,
+  name,
+  grade: "グレードE",
+  personMonth: "1.0",
+}));
+
 function updateLevel(depts, level = 0) {
   return depts.map((dept) => {
     dept.level = level;
@@ -109,44 +150,20 @@ export default function App() {
   const [departments, setDepartments] = useState(
     updateLevel(defaultDepartments)
   );
+  const [employees, setEmployees] = useState(defaultEmployees);
   const [target, setTarget] = useState(null);
 
-  const employees = [
-    "松山 望結",
-    "木村 乃蒼",
-    "奥田 光雄",
-    "徳田 泰人",
-    "浅野 和聖",
-    "黒木 波映",
-    "田中 彩花",
-    "鈴木 由美",
-    "山田 裕二",
-    "佐藤 英二",
-    "小林 瑠衣",
-    "高橋 一郎",
-    "伊藤 二郎",
-    "山本 三郎",
-    "中村 四郎",
-    "小川 五郎",
-    "加藤 結衣",
-    "吉田 美咲",
-    "山口 美保",
-    "松本 健太",
-    "山田 太郎",
-    "藤原 拓哉",
-    "鈴木 一郎",
-    "高橋 二郎",
-    "田中 三郎",
-    "伊藤 四郎",
-    "渡辺 五郎",
-    "山本 結衣",
-    "中村 美咲",
-    "小川 美保",
-    "加藤 健太",
-    "吉田 太郎",
-  ].map((name, index) => (
-    <Employee key={index + 1} id={index + 1} name={name} />
-  ));
+  const employeeComponents = employees.map(
+    ({ id, name, grade, personMonth }) => (
+      <Employee
+        key={id}
+        id={id}
+        name={name}
+        grade={grade}
+        personMonth={personMonth}
+      />
+    )
+  );
 
   const sensors = useSensors(
     useSensor(MouseSensor, { activationConstraint: { distance: 3 } })
@@ -162,10 +179,12 @@ export default function App() {
       >
         <TargetContext.Provider value={target}>
           <SetTargetContext.Provider value={setTarget}>
-            <div style={{ marginLeft: 20 }}>
-              {departments.map(renderDepartment)}
-            </div>
-            <div style={{ height: 100 }}></div>
+            <SetEmployeesContext.Provider value={setEmployees}>
+              <div style={{ marginLeft: 20 }}>
+                {departments.map(renderDepartment)}
+              </div>
+              <div style={{ height: 100 }}></div>
+            </SetEmployeesContext.Provider>
           </SetTargetContext.Provider>
         </TargetContext.Provider>
       </DndContext>
@@ -175,12 +194,12 @@ export default function App() {
   function renderDepartment(department) {
     const deptMembers =
       department.memberSet.size > 0
-        ? [...department.memberSet].map((id) => employees[id - 1])
+        ? [...department.memberSet].map((id) => employeeComponents[id - 1])
         : noDataFound;
 
     const deptManagers =
       department.managers.size > 0
-        ? [...department.managers].map((id) => employees[id - 1])
+        ? [...department.managers].map((id) => employeeComponents[id - 1])
         : noDataFound;
 
     return (
