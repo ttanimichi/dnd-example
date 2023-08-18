@@ -78,7 +78,7 @@ function PersonMonthSelect({ personMonth, setPersonMonth }) {
   );
 }
 
-export default function EmployeeInfoFormDialog({ open, setOpen, employee }) {
+export default function EmployeeInfoDialog({ open, setOpen, employee }) {
   const setEmployees = React.useContext(SetEmployeesContext);
 
   const [grade, setGrade] = React.useState(employee.grade);
@@ -117,7 +117,7 @@ export default function EmployeeInfoFormDialog({ open, setOpen, employee }) {
           <DialogContentText>
             以下の従業員情報を入力してください。
           </DialogContentText>
-          <Box sx={{ height: 20 }} />
+          <Box sx={{ height: 10 }} />
           <Stack spacing={3}>
             <TextField
               autoFocus

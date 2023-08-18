@@ -5,6 +5,7 @@ import Department from "./Department";
 import TargetContext from "./TargetContext";
 import SetTargetContext from "./SetTargetContext";
 import SetEmployeesContext from "./SetEmployeesContext";
+import SetDepartmentsContext from "./SetDepartmentsContext";
 import Header from "./Header";
 
 const defaultDepartments = [
@@ -180,10 +181,12 @@ export default function App() {
         <TargetContext.Provider value={target}>
           <SetTargetContext.Provider value={setTarget}>
             <SetEmployeesContext.Provider value={setEmployees}>
-              <div style={{ marginLeft: 20 }}>
-                {departments.map(renderDepartment)}
-              </div>
-              <div style={{ height: 100 }}></div>
+              <SetDepartmentsContext.Provider value={setDepartments}>
+                <div style={{ marginLeft: 20 }}>
+                  {departments.map(renderDepartment)}
+                </div>
+                <div style={{ height: 100 }}></div>
+              </SetDepartmentsContext.Provider>
             </SetEmployeesContext.Provider>
           </SetTargetContext.Provider>
         </TargetContext.Provider>

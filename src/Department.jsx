@@ -3,23 +3,13 @@ import { Droppable } from "./Droppable";
 import { Draggable } from "./Draggable";
 import TargetContext from "./TargetContext";
 import DeptMenu from "./DeptMenu";
+import toSuffix from "./utils/toSuffix";
 
-export default function Department({ id, deptName, level, managers, members }) {
+export default function Department({ id, deptName, managers, members, level }) {
   const target = useContext(TargetContext);
 
-  let suffix = "";
-  switch (level) {
-    case 0:
-      break;
-    case 1:
-      suffix = "本部";
-      break;
-    case 2:
-      suffix = "部";
-      break;
-    default:
-      suffix = "課";
-  }
+  let suffix = toSuffix(level);
+  const dept = { id, deptName, managers, members, level, suffix };
 
   return (
     <Droppable
@@ -51,7 +41,7 @@ export default function Department({ id, deptName, level, managers, members }) {
             }}
           >
             <div>{`${deptName}${suffix}`}</div>
-            <DeptMenu />
+            <DeptMenu dept={dept} />
           </div>
           <div>
             {id === 0 ? (
