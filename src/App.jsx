@@ -154,17 +154,10 @@ export default function App() {
   const [employees, setEmployees] = useState(defaultEmployees);
   const [target, setTarget] = useState(null);
 
-  const employeeComponents = employees.map(
-    ({ id, name, grade, personMonth }) => (
-      <Employee
-        key={id}
-        id={id}
-        name={name}
-        grade={grade}
-        personMonth={personMonth}
-      />
-    )
-  );
+  const employeeMap = new Map();
+  employees.forEach((e) => {
+    employeeMap.set(e.id, e);
+  });
 
   const sensors = useSensors(
     useSensor(MouseSensor, { activationConstraint: { distance: 3 } })
@@ -197,12 +190,34 @@ export default function App() {
   function renderDepartment(department) {
     const deptMembers =
       department.memberSet.size > 0
-        ? [...department.memberSet].map((id) => employeeComponents[id - 1])
+        ? [...department.memberSet].map((id) => {
+            const { name, grade, personMonth } = employeeMap.get(id);
+            return (
+              <Employee
+                key={id}
+                id={id}
+                name={name}
+                grade={grade}
+                personMonth={personMonth}
+              />
+            );
+          })
         : noDataFound;
 
     const deptManagers =
       department.managers.size > 0
-        ? [...department.managers].map((id) => employeeComponents[id - 1])
+        ? [...department.managers].map((id) => {
+            const { name, grade, personMonth } = employeeMap.get(id);
+            return (
+              <Employee
+                key={id}
+                id={id}
+                name={name}
+                grade={grade}
+                personMonth={personMonth}
+              />
+            );
+          })
         : noDataFound;
 
     return (

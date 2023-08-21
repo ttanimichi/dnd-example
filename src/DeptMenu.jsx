@@ -4,11 +4,14 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import DeptNameDialog from "./DeptNameDialog";
 import NewDeptDialog from "./NewDeptDialog";
+import NewEmployeeDialog from "./NewEmployeeDialog";
 
 export default function DeptMenu({ dept }) {
   const [anchorEl, setAnchorEl] = useState(null);
   const [deptNameDialogOpen, setDeptNameDialogOpen] = useState(false);
   const [newDeptDialogOpen, setNewDeptDialogOpen] = useState(false);
+  const [newEmployeeDialogOpen, setNewEmployeeDialogOpen] = useState(false);
+
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -22,6 +25,10 @@ export default function DeptMenu({ dept }) {
   };
   const openNewDeptDialog = () => {
     setNewDeptDialogOpen(true);
+    handleClose();
+  };
+  const openNewEmployeeDialog = () => {
+    setNewEmployeeDialogOpen(true);
     handleClose();
   };
 
@@ -46,7 +53,7 @@ export default function DeptMenu({ dept }) {
           "aria-labelledby": "basic-button",
         }}
       >
-        <MenuItem onClick={handleClose}>新入社員を追加</MenuItem>
+        <MenuItem onClick={openNewEmployeeDialog}>新入社員を追加</MenuItem>
         <MenuItem onClick={handleClose}>この部署を廃止</MenuItem>
         <MenuItem onClick={openDeptNameDialog}>部署名を編集</MenuItem>
         <MenuItem onClick={openNewDeptDialog}>直下に部署を追加</MenuItem>
@@ -59,6 +66,11 @@ export default function DeptMenu({ dept }) {
       <NewDeptDialog
         open={newDeptDialogOpen}
         setOpen={setNewDeptDialogOpen}
+        dept={dept}
+      />
+      <NewEmployeeDialog
+        open={newEmployeeDialogOpen}
+        setOpen={setNewEmployeeDialogOpen}
         dept={dept}
       />
     </div>
