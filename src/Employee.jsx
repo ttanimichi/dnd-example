@@ -7,7 +7,7 @@ export default function Employee(props) {
   const { id, name, grade, personMonth } = props;
 
   return (
-    <div key={id} style={{ paddingBottom: 10 }}>
+    <div key={id} style={{ paddingBottom: 10, marginLeft: -100 }}>
       <Draggable id={`drag-employee-${id}`} data={{ type: "employee" }}>
         <div
           style={{
