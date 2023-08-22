@@ -3,7 +3,7 @@ import { DndContext, useSensor, useSensors, MouseSensor } from "@dnd-kit/core";
 import Employee from "./Employee";
 import Department from "./Department";
 import TargetContext from "./TargetContext";
-import SetTargetContext from "./SetTargetContext";
+import SetTargetContext from "./setTargetContext";
 import SetEmployeesContext from "./SetEmployeesContext";
 import SetDepartmentsContext from "./SetDepartmentsContext";
 import Header from "./Header";
