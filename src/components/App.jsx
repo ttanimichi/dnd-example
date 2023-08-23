@@ -4,6 +4,7 @@ import Header from "./Header";
 import OrganizationChart from "./OrganizationChart";
 
 import TargetContext from "../utils/TargetContext";
+import EmployeesContext from "../utils/EmployeesContext";
 import SetTargetContext from "../utils/setTargetContext";
 import SetEmployeesContext from "../utils/SetEmployeesContext";
 import SetDepartmentsContext from "../utils/SetDepartmentsContext";
@@ -19,13 +20,12 @@ export default function App() {
     <TargetContext.Provider value={target}>
       <SetTargetContext.Provider value={setTarget}>
         <SetEmployeesContext.Provider value={setEmployees}>
-          <SetDepartmentsContext.Provider value={setDepartments}>
-            <Header />
-            <OrganizationChart
-              departments={departments}
-              employees={employees}
-            />
-          </SetDepartmentsContext.Provider>
+          <EmployeesContext.Provider value={employees}>
+            <SetDepartmentsContext.Provider value={setDepartments}>
+              <Header />
+              <OrganizationChart departments={departments} />
+            </SetDepartmentsContext.Provider>
+          </EmployeesContext.Provider>
         </SetEmployeesContext.Provider>
       </SetTargetContext.Provider>
     </TargetContext.Provider>

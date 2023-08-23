@@ -2,14 +2,46 @@ import { useContext } from "react";
 import { Droppable } from "../utils/Droppable";
 import { Draggable } from "../utils/Draggable";
 import TargetContext from "../utils/TargetContext";
+import EmployeesContext from "../utils/EmployeesContext";
 import DeptMenu from "./DeptMenu";
 import toSuffix from "../utils/toSuffix";
+import Employee from "./Employee";
 
 export default function Department({ id, deptName, managers, members, level }) {
   const target = useContext(TargetContext);
+  const employees = useContext(EmployeesContext);
+  const employeeMap = new Map();
+  employees.forEach((e) => {
+    employeeMap.set(e.id, e);
+  });
 
   let suffix = toSuffix(level);
-  const dept = { id, deptName, managers, members, level, suffix };
+  const dept = { id, deptName, level, suffix };
+
+  function employeeList(ids) {
+    const noDataFound = (
+      <div style={{ paddingTop: 10, paddingBottom: 10 }}>
+        データがありません
+      </div>
+    );
+
+    if (ids.size > 0) {
+      return [...ids].map((id) => {
+        const { name, grade, personMonth } = employeeMap.get(id);
+        return (
+          <Employee
+            key={id}
+            id={id}
+            name={name}
+            grade={grade}
+            personMonth={personMonth}
+          />
+        );
+      });
+    } else {
+      return noDataFound;
+    }
+  }
 
   return (
     <Droppable
@@ -52,7 +84,7 @@ export default function Department({ id, deptName, managers, members, level }) {
                   disabled={target !== "employee"}
                 >
                   <div style={{ height: 10 }}></div>
-                  {members}
+                  {employeeList(members)}
                 </Droppable>
               </>
             ) : (
@@ -65,7 +97,7 @@ export default function Department({ id, deptName, managers, members, level }) {
                   <div style={{ paddingTop: 10, paddingBottom: 10 }}>
                     部門長
                   </div>
-                  {managers}
+                  {employeeList(managers)}
                 </Droppable>
                 <hr style={{ margin: 0 }} />
                 <Droppable
@@ -76,7 +108,7 @@ export default function Department({ id, deptName, managers, members, level }) {
                   <div style={{ paddingTop: 10, paddingBottom: 10 }}>
                     メンバー
                   </div>
-                  {members}
+                  {employeeList(members)}
                 </Droppable>
               </>
             )}

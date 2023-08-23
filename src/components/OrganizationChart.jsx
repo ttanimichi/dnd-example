@@ -1,5 +1,4 @@
 import { DndContext, useSensor, useSensors, MouseSensor } from "@dnd-kit/core";
-import Employee from "./Employee";
 import Department from "./Department";
 import SetDepartmentsContext from "../utils/SetDepartmentsContext";
 import TargetContext from "../utils/TargetContext";
@@ -7,15 +6,10 @@ import SetTargetContext from "../utils/setTargetContext";
 import { useContext } from "react";
 import updateLevel from "../utils/updateLevel";
 
-export default function OrganizationChart({ departments, employees }) {
+export default function OrganizationChart({ departments }) {
   const setDepartments = useContext(SetDepartmentsContext);
   const target = useContext(TargetContext);
   const setTarget = useContext(SetTargetContext);
-
-  const employeeMap = new Map();
-  employees.forEach((e) => {
-    employeeMap.set(e.id, e);
-  });
 
   const sensors = useSensors(
     useSensor(MouseSensor, { activationConstraint: { distance: 3 } })
@@ -32,58 +26,24 @@ export default function OrganizationChart({ departments, employees }) {
     </DndContext>
   );
 
-  function renderDepartment(department) {
-    const noDataFound = (
-      <div style={{ paddingTop: 10, paddingBottom: 10 }}>
-        データがありません
-      </div>
-    );
-
-    const deptMembers =
-      department.memberSet.size > 0
-        ? [...department.memberSet].map((id) => {
-            const { name, grade, personMonth } = employeeMap.get(id);
-            return (
-              <Employee
-                key={id}
-                id={id}
-                name={name}
-                grade={grade}
-                personMonth={personMonth}
-              />
-            );
-          })
-        : noDataFound;
-
-    const deptManagers =
-      department.managers.size > 0
-        ? [...department.managers].map((id) => {
-            const { name, grade, personMonth } = employeeMap.get(id);
-            return (
-              <Employee
-                key={id}
-                id={id}
-                name={name}
-                grade={grade}
-                personMonth={personMonth}
-              />
-            );
-          })
-        : noDataFound;
-
+  function renderDepartment({
+    id,
+    name,
+    level,
+    managers,
+    memberSet,
+    children,
+  }) {
     return (
-      <div
-        key={department.id}
-        style={{ display: "flex", alignItems: "flex-start" }}
-      >
+      <div key={id} style={{ display: "flex", alignItems: "flex-start" }}>
         <Department
-          id={department.id}
-          deptName={department.name}
-          level={department.level}
-          managers={deptManagers}
-          members={deptMembers}
+          id={id}
+          deptName={name}
+          level={level}
+          managers={managers}
+          members={memberSet}
         />
-        <div>{department.children.map(renderDepartment)}</div>
+        <div>{children.map(renderDepartment)}</div>
       </div>
     );
   }
