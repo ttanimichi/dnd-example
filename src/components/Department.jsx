@@ -1,9 +1,9 @@
 import { useContext } from "react";
-import { Droppable } from "./Droppable";
-import { Draggable } from "./Draggable";
-import TargetContext from "./TargetContext";
+import { Droppable } from "../utils/Droppable";
+import { Draggable } from "../utils/Draggable";
+import TargetContext from "../utils/TargetContext";
 import DeptMenu from "./DeptMenu";
-import toSuffix from "./utils/toSuffix";
+import toSuffix from "../utils/toSuffix";
 
 export default function Department({ id, deptName, managers, members, level }) {
   const target = useContext(TargetContext);

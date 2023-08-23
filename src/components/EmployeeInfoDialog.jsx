@@ -15,7 +15,7 @@ import Select from "@mui/material/Select";
 import Stack from "@mui/material/Stack";
 import Box from "@mui/material/Box";
 
-import SetEmployeesContext from "./SetEmployeesContext";
+import SetEmployeesContext from "../utils/SetEmployeesContext";
 
 function GradeSelect({ grade, setGrade }) {
   const handleChange = (event) => {

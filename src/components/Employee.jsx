@@ -1,4 +1,4 @@
-import { Draggable } from "./Draggable";
+import { Draggable } from "../utils/Draggable";
 import Chip from "@mui/material/Chip";
 import Stack from "@mui/material/Stack";
 import EmployeeMenu from "./EmployeeMenu";

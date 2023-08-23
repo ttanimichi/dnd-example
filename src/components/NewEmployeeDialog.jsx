@@ -15,8 +15,8 @@ import Select from "@mui/material/Select";
 import Stack from "@mui/material/Stack";
 import Box from "@mui/material/Box";
 
-import SetEmployeesContext from "./SetEmployeesContext";
-import SetDepartmentsContext from "./SetDepartmentsContext";
+import SetEmployeesContext from "../utils/SetEmployeesContext";
+import SetDepartmentsContext from "../utils/SetDepartmentsContext";
 
 function TypeSelect({ type, setType }) {
   const handleChange = (event) => {

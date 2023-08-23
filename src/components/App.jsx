@@ -2,10 +2,10 @@ import { useState } from "react";
 import { DndContext, useSensor, useSensors, MouseSensor } from "@dnd-kit/core";
 import Employee from "./Employee";
 import Department from "./Department";
-import TargetContext from "./TargetContext";
-import SetTargetContext from "./setTargetContext";
-import SetEmployeesContext from "./SetEmployeesContext";
-import SetDepartmentsContext from "./SetDepartmentsContext";
+import TargetContext from "../utils/TargetContext";
+import SetTargetContext from "../utils/setTargetContext";
+import SetEmployeesContext from "../utils/SetEmployeesContext";
+import SetDepartmentsContext from "../utils/SetDepartmentsContext";
 import Header from "./Header";
 
 const defaultDepartments = [

@@ -9,35 +9,26 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import Box from "@mui/material/Box";
 
-import SetDepartmentsContext from "./SetDepartmentsContext";
-import toSuffix from "./utils/toSuffix";
+import SetDepartmentsContext from "../utils/SetDepartmentsContext";
 
-export default function NewDeptDialog({ open, setOpen, dept }) {
+export default function DeptNameDialog({ open, setOpen, dept }) {
   const setDepartments = useContext(SetDepartmentsContext);
 
-  const suffix = toSuffix(dept.level + 1);
+  const suffix = dept.suffix;
 
-  const [deptName, setDeptName] = useState("");
+  const [deptName, setDeptName] = useState(dept.deptName);
 
   const handleClose = () => {
     setOpen(false);
   };
 
-  const addDept = (depts) => {
+  const updateDeptName = (depts) => {
     depts.forEach((d) => {
       if (d.id === dept.id) {
-        d.children.push({
-          id: Math.floor(Math.random() * (100000000 + 1 - 10000)) + 10000,
-          name: deptName,
-          managers: new Set(),
-          memberSet: new Set(),
-          children: [],
-          level: d.level + 1,
-          suffix,
-        });
+        d.name = deptName;
       }
       if (d.children && d.children.length > 0) {
-        addDept(d.children);
+        updateDeptName(d.children);
       }
     });
   };
@@ -45,7 +36,8 @@ export default function NewDeptDialog({ open, setOpen, dept }) {
   const handleSave = () => {
     setDepartments((prev) => {
       const newDepts = structuredClone(prev);
-      addDept(newDepts);
+      updateDeptName(newDepts);
+      console.log(newDepts);
       return newDepts;
     });
 
@@ -55,7 +47,7 @@ export default function NewDeptDialog({ open, setOpen, dept }) {
   return (
     <div>
       <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>新規部署を作成</DialogTitle>
+        <DialogTitle>部署名を編集</DialogTitle>
         <DialogContent>
           <DialogContentText>以下の項目を入力してください。</DialogContentText>
           <Box sx={{ height: 10 }} />
@@ -63,7 +55,7 @@ export default function NewDeptDialog({ open, setOpen, dept }) {
             <TextField
               autoFocus
               margin="dense"
-              id="newDeptName"
+              id="deptName"
               label="部署名"
               type="text"
               fullWidth
