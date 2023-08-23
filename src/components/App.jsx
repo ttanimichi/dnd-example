@@ -20,11 +20,22 @@ export default function App() {
       <SetTargetContext.Provider value={setTarget}>
         <SetEmployeesContext.Provider value={setEmployees}>
           <SetDepartmentsContext.Provider value={setDepartments}>
-            <Header />
-            <OrganizationChart
-              departments={departments}
-              employees={employees}
-            />
+            <div
+              style={{
+                height: "100%",
+                width: "100%",
+                display: "flex",
+                flexDirection: "column",
+              }}
+            >
+              <Header />
+              <div style={{ flexGrow: 1, width: "100%", overflow: "scroll" }}>
+                <OrganizationChart
+                  departments={departments}
+                  employees={employees}
+                />
+              </div>
+            </div>
           </SetDepartmentsContext.Provider>
         </SetEmployeesContext.Provider>
       </SetTargetContext.Provider>
