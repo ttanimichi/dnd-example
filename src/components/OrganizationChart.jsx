@@ -21,7 +21,9 @@ export default function OrganizationChart({ departments }) {
       onDragStart={handleDragStart}
       sensors={sensors}
     >
-      <div style={{ marginLeft: 20 }}>{departments.map(renderDepartment)}</div>
+      <div style={{ marginLeft: 16, paddingTop: 80 }}>
+        {departments.map(renderDepartment)}
+      </div>
       <div style={{ height: 100 }}></div>
     </DndContext>
   );
