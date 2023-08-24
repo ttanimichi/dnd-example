@@ -1,6 +1,6 @@
 import { useContext } from "react";
-import { Droppable } from "../utils/Droppable";
-import { Draggable } from "../utils/Draggable";
+import { Droppable } from "./Droppable";
+import { Draggable } from "./Draggable";
 import TargetContext from "../utils/TargetContext";
 import EmployeesContext from "../utils/EmployeesContext";
 import DeptMenu from "./DeptMenu";
