@@ -30,7 +30,7 @@ export default function NewDeptDialog({ open, setOpen, dept }) {
           id: Math.floor(Math.random() * (100000000 + 1 - 10000)) + 10000,
           name: deptName,
           managers: new Set(),
-          memberSet: new Set(),
+          members: new Set(),
           children: [],
           level: d.level + 1,
           suffix,

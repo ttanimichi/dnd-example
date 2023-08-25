@@ -28,14 +28,7 @@ export default function OrganizationChart({ departments }) {
     </DndContext>
   );
 
-  function renderDepartment({
-    id,
-    name,
-    level,
-    managers,
-    memberSet,
-    children,
-  }) {
+  function renderDepartment({ id, name, level, managers, members, children }) {
     return (
       <div key={id} style={{ display: "flex", alignItems: "flex-start" }}>
         <Department
@@ -43,7 +36,7 @@ export default function OrganizationChart({ departments }) {
           deptName={name}
           level={level}
           managers={managers}
-          members={memberSet}
+          members={members}
         />
         <div>{children.map(renderDepartment)}</div>
       </div>
@@ -134,7 +127,7 @@ export default function OrganizationChart({ departments }) {
   function removeMember(depts, memberId) {
     depts.forEach((dept) => {
       dept.managers.delete(memberId);
-      dept.memberSet.delete(memberId);
+      dept.members.delete(memberId);
       removeMember(dept.children, memberId);
     });
   }
@@ -150,7 +143,7 @@ export default function OrganizationChart({ departments }) {
         if (type === "managers") {
           dept.managers.add(memberId);
         } else {
-          dept.memberSet.add(memberId);
+          dept.members.add(memberId);
         }
       } else if (dept.children.length > 0) {
         addMember(dept.children, overId, memberId);
