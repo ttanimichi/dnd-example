@@ -25,8 +25,8 @@ export default function Department({ id, deptName, managers, members, level }) {
       </div>
     );
 
-    if (ids.size > 0) {
-      return [...ids].map((id) => {
+    if (ids.length > 0) {
+      return ids.map((id) => {
         const { name, grade, avatar, personMonth } = employeeMap.get(id);
         return (
           <Employee

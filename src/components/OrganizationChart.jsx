@@ -126,8 +126,8 @@ export default function OrganizationChart({ departments }) {
 
   function removeMember(depts, memberId) {
     depts.forEach((dept) => {
-      dept.managers.delete(memberId);
-      dept.members.delete(memberId);
+      dept.managers = dept.managers.filter((n) => n !== memberId);
+      dept.members = dept.members.filter((n) => n !== memberId);
       removeMember(dept.children, memberId);
     });
   }
@@ -141,9 +141,9 @@ export default function OrganizationChart({ departments }) {
     depts.forEach((dept) => {
       if (dept.id === parseInt(deptId, 10)) {
         if (type === "managers") {
-          dept.managers.add(memberId);
+          dept.managers.push(memberId);
         } else {
-          dept.members.add(memberId);
+          dept.members.push(memberId);
         }
       } else if (dept.children.length > 0) {
         addMember(dept.children, overId, memberId);

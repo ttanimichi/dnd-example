@@ -119,7 +119,7 @@ export default function EmployeeInfoDialog({ open, setOpen, dept }) {
   const addEmployee = (depts) => {
     depts.forEach((d) => {
       if (d.id === dept.id) {
-        d.members.add(id);
+        d.members.push(id);
       }
       if (d.children && d.children.length > 0) {
         addEmployee(d.children);
