@@ -4,8 +4,7 @@ import Stack from "@mui/material/Stack";
 import EmployeeMenu from "./EmployeeMenu";
 
 export default function Employee(props) {
-  const { id, name, grade, personMonth } = props;
-  const img = id >= 10000 ? "/face/0.png" : `/face/${id}.png`;
+  const { id, name, avatar, grade, personMonth } = props;
 
   return (
     <div key={id} style={{ paddingBottom: 10 }}>
@@ -17,7 +16,7 @@ export default function Employee(props) {
             border: "1px solid grey",
           }}
         >
-          <img src={img} alt="" width="64" />
+          <img src={avatar} alt="" width="64" />
           <span style={{ width: 10 }} />
           <Stack spacing={1} style={{ flex: 1 }}>
             <div style={{ fontWeight: "bold" }}>{name}</div>

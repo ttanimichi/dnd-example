@@ -133,6 +133,7 @@ export default function EmployeeInfoDialog({ open, setOpen, dept }) {
       newEmployees.push({
         id,
         name,
+        avatar: "/avatar.png",
         employmentType,
         grade,
         personMonth,

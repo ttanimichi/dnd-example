@@ -27,12 +27,13 @@ export default function Department({ id, deptName, managers, members, level }) {
 
     if (ids.size > 0) {
       return [...ids].map((id) => {
-        const { name, grade, personMonth } = employeeMap.get(id);
+        const { name, grade, avatar, personMonth } = employeeMap.get(id);
         return (
           <Employee
             key={id}
             id={id}
             name={name}
+            avatar={avatar}
             grade={grade}
             personMonth={personMonth}
           />
