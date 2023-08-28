@@ -53,15 +53,14 @@ export default function OrganizationChart({ departments }) {
   function handleDragEnd(event) {
     const { over, active } = event;
     if (!over || !active) return;
-
-    const activeId = parseInt(active.id.match(/\d+/)[0], 10);
-    const overId = parseInt(over.id.match(/\d+/)[0], 10);
+    const activeId = active.id.split("/")[1];
+    const overId = over.id.split("/")[1];
 
     setDepartments((prevDepartments) => {
       const newDepartments = structuredClone(prevDepartments);
       if (target === "employee") {
-        removeMember(newDepartments, activeId);
-        addMember(newDepartments, over.id, activeId);
+        const removed = removeMember(newDepartments, active.id.split("/")[1]);
+        addMember(newDepartments, over.id, removed);
       } else if (target === "dept") {
         // 循環参照を防止
         if (!isDescendant(newDepartments, activeId, overId)) {
@@ -125,28 +124,40 @@ export default function OrganizationChart({ departments }) {
   }
 
   function removeMember(depts, memberId) {
-    depts.forEach((dept) => {
-      dept.managers = dept.managers.filter((n) => n !== memberId);
-      dept.members = dept.members.filter((n) => n !== memberId);
-      removeMember(dept.children, memberId);
-    });
+    for (let i = 0; i < depts.length; i++) {
+      const dept = depts[i];
+      const removedManagers = dept.managers.filter((n) => n.id === memberId);
+      const removedMembers = dept.members.filter((n) => n.id === memberId);
+
+      if (removedManagers.length > 0) {
+        dept.managers = dept.managers.filter((n) => n.id !== memberId);
+        return removedManagers[0];
+      } else if (removedMembers.length > 0) {
+        dept.members = dept.members.filter((n) => n.id !== memberId);
+        return removedMembers[0];
+      } else {
+        const result = removeMember(dept.children, memberId);
+        if (result !== undefined) return result;
+      }
+    }
   }
 
-  function addMember(depts, overId, memberId) {
-    if (typeof overId !== "string" || !overId.includes("-")) return;
+  function addMember(depts, overId, employee) {
+    if (typeof overId !== "string") return;
 
-    const type = overId.split("-")[0];
-    const deptId = overId.split("-")[1];
+    const o = overId.split("/");
+    const type = o[0];
+    const deptId = o[1];
 
     depts.forEach((dept) => {
-      if (dept.id === parseInt(deptId, 10)) {
+      if (dept.id === deptId) {
         if (type === "managers") {
-          dept.managers.push(memberId);
+          dept.managers.push(employee);
         } else {
-          dept.members.push(memberId);
+          dept.members.push(employee);
         }
       } else if (dept.children.length > 0) {
-        addMember(dept.children, overId, memberId);
+        addMember(dept.children, overId, employee);
       }
     });
   }

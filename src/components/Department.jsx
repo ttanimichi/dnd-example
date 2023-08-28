@@ -2,40 +2,32 @@ import { useContext } from "react";
 import { Droppable } from "./Droppable";
 import { Draggable } from "./Draggable";
 import TargetContext from "../utils/TargetContext";
-import EmployeesContext from "../utils/EmployeesContext";
 import DeptMenu from "./DeptMenu";
 import toSuffix from "../utils/toSuffix";
 import Employee from "./Employee";
 
 export default function Department({ id, deptName, managers, members, level }) {
   const target = useContext(TargetContext);
-  const employees = useContext(EmployeesContext);
-  const employeeMap = new Map();
-  employees.forEach((e) => {
-    employeeMap.set(e.id, e);
-  });
-
   let suffix = toSuffix(level);
   const dept = { id, deptName, level, suffix };
 
-  function employeeList(ids) {
+  function employeeList(employees) {
     const noDataFound = (
       <div style={{ paddingTop: 10, paddingBottom: 10 }}>
         データがありません
       </div>
     );
 
-    if (ids.length > 0) {
-      return ids.map((id) => {
-        const { name, grade, avatar, personMonth } = employeeMap.get(id);
+    if (employees.length > 0) {
+      return employees.map(({ id, name, grade, personMonth, avatar }) => {
         return (
           <Employee
             key={id}
             id={id}
             name={name}
-            avatar={avatar}
             grade={grade}
             personMonth={personMonth}
+            avatar={avatar}
           />
         );
       });
@@ -46,13 +38,13 @@ export default function Department({ id, deptName, managers, members, level }) {
 
   return (
     <Droppable
-      key={`drop-dept-${id}`}
-      id={`drop-dept-${id}`}
+      key={`drop-dept/${id}`}
+      id={`drop-dept/${id}`}
       disabled={target !== "dept"}
     >
       <Draggable
-        key={`drag-dept-${id}`}
-        id={`drag-dept-${id}`}
+        key={`drag-dept/${id}`}
+        id={`drag-dept/${id}`}
         data={{ type: "dept" }}
       >
         <div
@@ -77,11 +69,11 @@ export default function Department({ id, deptName, managers, members, level }) {
             <DeptMenu dept={dept} />
           </div>
           <div>
-            {id === 0 ? (
+            {level === 0 ? (
               <>
                 <Droppable
-                  key={`members-${id}`}
-                  id={`members-${id}`}
+                  key={`members/${id}`}
+                  id={`members/${id}`}
                   disabled={target !== "employee"}
                 >
                   <div style={{ height: 10 }}></div>
@@ -91,8 +83,8 @@ export default function Department({ id, deptName, managers, members, level }) {
             ) : (
               <>
                 <Droppable
-                  key={`managers-${id}`}
-                  id={`managers-${id}`}
+                  key={`managers/${id}`}
+                  id={`managers/${id}`}
                   disabled={target !== "employee"}
                 >
                   <div style={{ paddingTop: 10, paddingBottom: 10 }}>
@@ -102,8 +94,8 @@ export default function Department({ id, deptName, managers, members, level }) {
                 </Droppable>
                 <hr style={{ margin: 0 }} />
                 <Droppable
-                  key={`members-${id}`}
-                  id={`members-${id}`}
+                  key={`members/${id}`}
+                  id={`members/${id}`}
                   disabled={target !== "employee"}
                 >
                   <div style={{ paddingTop: 10, paddingBottom: 10 }}>

@@ -37,7 +37,6 @@ export default function DeptNameDialog({ open, setOpen, dept }) {
     setDepartments((prev) => {
       const newDepts = structuredClone(prev);
       updateDeptName(newDepts);
-      console.log(newDepts);
       return newDepts;
     });
 

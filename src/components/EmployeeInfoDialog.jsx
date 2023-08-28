@@ -15,7 +15,7 @@ import Select from "@mui/material/Select";
 import Stack from "@mui/material/Stack";
 import Box from "@mui/material/Box";
 
-import SetEmployeesContext from "../utils/SetEmployeesContext";
+import SetDepartmentsContext from "../utils/SetDepartmentsContext";
 
 function GradeSelect({ grade, setGrade }) {
   const handleChange = (event) => {
@@ -79,7 +79,7 @@ function PersonMonthSelect({ personMonth, setPersonMonth }) {
 }
 
 export default function EmployeeInfoDialog({ open, setOpen, employee }) {
-  const setEmployees = React.useContext(SetEmployeesContext);
+  const setDepartments = React.useContext(SetDepartmentsContext);
 
   const [grade, setGrade] = React.useState(employee.grade);
   const [personMonth, setPersonMonth] = React.useState(employee.personMonth);
@@ -89,21 +89,29 @@ export default function EmployeeInfoDialog({ open, setOpen, employee }) {
     setOpen(false);
   };
 
+  const _updateEmployee = (member) => {
+    if (member.id === employee.id) {
+      member.grade = grade;
+      member.personMonth = personMonth;
+      member.name = name;
+    }
+  };
+
+  const updateEmployee = (depts) => {
+    depts.forEach((dept) => {
+      dept.members.forEach(_updateEmployee);
+      dept.managers.forEach(_updateEmployee);
+      if (dept.children && dept.children.length > 0) {
+        updateEmployee(dept.children);
+      }
+    });
+  };
+
   const handleSave = () => {
-    setEmployees((prev) => {
-      const newEmployees = prev.map((e) => {
-        if (e.id === employee.id) {
-          return {
-            ...e,
-            grade: grade,
-            personMonth: personMonth,
-            name: name,
-          };
-        } else {
-          return e;
-        }
-      });
-      return newEmployees;
+    setDepartments((prev) => {
+      const newDepts = structuredClone(prev);
+      updateEmployee(newDepts);
+      return newDepts;
     });
 
     setOpen(false);

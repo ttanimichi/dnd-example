@@ -4,11 +4,11 @@ import Stack from "@mui/material/Stack";
 import EmployeeMenu from "./EmployeeMenu";
 
 export default function Employee(props) {
-  const { id, name, avatar, grade, personMonth } = props;
+  const { id, name, grade, personMonth, avatar } = props;
 
   return (
     <div key={id} style={{ paddingBottom: 10 }}>
-      <Draggable id={`drag-employee-${id}`} data={{ type: "employee" }}>
+      <Draggable id={`drag-employee/${id}`} data={{ type: "employee" }}>
         <div
           style={{
             display: "flex",

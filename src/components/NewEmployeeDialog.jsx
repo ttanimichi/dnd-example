@@ -15,8 +15,9 @@ import Select from "@mui/material/Select";
 import Stack from "@mui/material/Stack";
 import Box from "@mui/material/Box";
 
-import SetEmployeesContext from "../utils/SetEmployeesContext";
 import SetDepartmentsContext from "../utils/SetDepartmentsContext";
+
+import { createEmployee } from "../utils/createEmployees";
 
 function TypeSelect({ type, setType }) {
   const handleChange = (event) => {
@@ -103,7 +104,6 @@ function PersonMonthSelect({ personMonth, setPersonMonth }) {
 }
 
 export default function EmployeeInfoDialog({ open, setOpen, dept }) {
-  const setEmployees = React.useContext(SetEmployeesContext);
   const setDepartments = React.useContext(SetDepartmentsContext);
 
   const [name, setName] = React.useState("");
@@ -111,15 +111,21 @@ export default function EmployeeInfoDialog({ open, setOpen, dept }) {
   const [grade, setGrade] = React.useState("グレードE");
   const [personMonth, setPersonMonth] = React.useState("1.0");
 
-  const id = Math.floor(Math.random() * (100000000 + 1 - 10000)) + 10000;
-
   const handleClose = () => {
     setOpen(false);
   };
+
   const addEmployee = (depts) => {
     depts.forEach((d) => {
       if (d.id === dept.id) {
-        d.members.push(id);
+        d.members.push(
+          createEmployee({
+            name,
+            grade,
+            personMonth,
+            employmentType,
+          })
+        );
       }
       if (d.children && d.children.length > 0) {
         addEmployee(d.children);
@@ -128,19 +134,6 @@ export default function EmployeeInfoDialog({ open, setOpen, dept }) {
   };
 
   const handleSave = () => {
-    setEmployees((prev) => {
-      const newEmployees = [...prev];
-      newEmployees.push({
-        id,
-        name,
-        avatar: "/avatar.png",
-        employmentType,
-        grade,
-        personMonth,
-      });
-      return newEmployees;
-    });
-
     setDepartments((prev) => {
       const newDepts = structuredClone(prev);
       addEmployee(newDepts);

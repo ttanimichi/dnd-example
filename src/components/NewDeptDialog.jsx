@@ -27,7 +27,7 @@ export default function NewDeptDialog({ open, setOpen, dept }) {
     depts.forEach((d) => {
       if (d.id === dept.id) {
         d.children.push({
-          id: Math.floor(Math.random() * (100000000 + 1 - 10000)) + 10000,
+          id: crypto.randomUUID(),
           name: deptName,
           managers: [],
           members: [],
