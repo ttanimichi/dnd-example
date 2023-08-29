@@ -11,7 +11,7 @@ import RedoIcon from "@mui/icons-material/Redo";
 
 export default function Header() {
   return (
-    <Box sx={{ flexGrow: 1, position: "fixed", width: "100%" }}>
+    <Box sx={{ flexGrow: 1, position: "fixed", width: "100vw" }}>
       <AppBar position="static">
         <Toolbar>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
