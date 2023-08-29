@@ -23,7 +23,12 @@ const defaultDepartments = [
           },
           {
             name: "総務",
-            children: [],
+            children: [
+              {
+                name: "庶務",
+                children: [],
+              },
+            ],
           },
         ],
       },
@@ -45,7 +50,16 @@ const defaultDepartments = [
           },
           {
             name: "営業第二",
-            children: [],
+            children: [
+              {
+                name: "企画営業",
+                children: [],
+              },
+              {
+                name: "販売推進",
+                children: [],
+              },
+            ],
           },
         ],
       },
