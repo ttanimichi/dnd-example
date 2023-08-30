@@ -28,7 +28,7 @@ export default function OrganizationChart({ departments }) {
     </DndContext>
   );
 
-  function renderDepartment({ id, name, level, managers, members, children }) {
+  function renderDepartment({ id, name, level, managers, members, branches }) {
     return (
       <div key={id} style={{ display: "flex", alignItems: "flex-start" }}>
         <Department
@@ -37,8 +37,9 @@ export default function OrganizationChart({ departments }) {
           level={level}
           managers={managers}
           members={members}
+          branches={branches}
         />
-        <div>{children.map(renderDepartment)}</div>
+        <div>{branches.map(renderDepartment)}</div>
       </div>
     );
   }
@@ -83,9 +84,9 @@ export default function OrganizationChart({ departments }) {
       return true;
     }
 
-    if (subTree.children && subTree.children.length > 0) {
-      for (let i = 0; i < subTree.children.length; i++) {
-        if (isDescendantSubTree(subTree.children[i], childId)) {
+    if (subTree.branches && subTree.branches.length > 0) {
+      for (let i = 0; i < subTree.branches.length; i++) {
+        if (isDescendantSubTree(subTree.branches[i], childId)) {
           return true;
         }
       }
@@ -101,8 +102,8 @@ export default function OrganizationChart({ departments }) {
         return removed[0];
       }
 
-      if (depts[i].children && depts[i].children.length > 0) {
-        const removed = removeById(depts[i].children, idToRemove);
+      if (depts[i].branches && depts[i].branches.length > 0) {
+        const removed = removeById(depts[i].branches, idToRemove);
         if (removed) {
           return removed;
         }
@@ -113,12 +114,12 @@ export default function OrganizationChart({ departments }) {
   function addToChildrenById(depts, id, value) {
     for (let i = 0; i < depts.length; i++) {
       if (depts[i].id === id) {
-        depts[i].children.push(value);
+        depts[i].branches.push(value);
         return;
       }
 
-      if (depts[i].children && depts[i].children.length > 0) {
-        addToChildrenById(depts[i].children, id, value);
+      if (depts[i].branches && depts[i].branches.length > 0) {
+        addToChildrenById(depts[i].branches, id, value);
       }
     }
   }
@@ -136,7 +137,7 @@ export default function OrganizationChart({ departments }) {
         dept.members = dept.members.filter((n) => n.id !== memberId);
         return removedMembers[0];
       } else {
-        const result = removeMember(dept.children, memberId);
+        const result = removeMember(dept.branches, memberId);
         if (result !== undefined) return result;
       }
     }
@@ -156,8 +157,8 @@ export default function OrganizationChart({ departments }) {
         } else {
           dept.members.push(employee);
         }
-      } else if (dept.children.length > 0) {
-        addMember(dept.children, overId, employee);
+      } else if (dept.branches.length > 0) {
+        addMember(dept.branches, overId, employee);
       }
     });
   }

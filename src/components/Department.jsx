@@ -4,37 +4,12 @@ import { Draggable } from "./Draggable";
 import TargetContext from "../utils/TargetContext";
 import DeptMenu from "./DeptMenu";
 import toSuffix from "../utils/toSuffix";
-import Employee from "./Employee";
+import EmployeeList from "./employeeList";
 
-export default function Department({ id, deptName, managers, members, level }) {
+export default function Department(dept) {
+  const { id, deptName, managers, members, level } = dept;
   const target = useContext(TargetContext);
   let suffix = toSuffix(level);
-  const dept = { id, deptName, level, suffix };
-
-  function employeeList(employees) {
-    const noDataFound = (
-      <div style={{ paddingTop: 10, paddingBottom: 10 }}>
-        データがありません
-      </div>
-    );
-
-    if (employees.length > 0) {
-      return employees.map(({ id, name, grade, personMonth, avatar }) => {
-        return (
-          <Employee
-            key={id}
-            id={id}
-            name={name}
-            grade={grade}
-            personMonth={personMonth}
-            avatar={avatar}
-          />
-        );
-      });
-    } else {
-      return noDataFound;
-    }
-  }
 
   return (
     <Droppable
@@ -77,7 +52,7 @@ export default function Department({ id, deptName, managers, members, level }) {
                   disabled={target !== "employee"}
                 >
                   <div style={{ height: 10 }}></div>
-                  {employeeList(members)}
+                  <EmployeeList employees={members} />
                 </Droppable>
               </>
             ) : (
@@ -90,7 +65,7 @@ export default function Department({ id, deptName, managers, members, level }) {
                   <div style={{ paddingTop: 10, paddingBottom: 10 }}>
                     部門長
                   </div>
-                  {employeeList(managers)}
+                  <EmployeeList employees={managers} />
                 </Droppable>
                 <hr style={{ margin: 0 }} />
                 <Droppable
@@ -101,7 +76,7 @@ export default function Department({ id, deptName, managers, members, level }) {
                   <div style={{ paddingTop: 10, paddingBottom: 10 }}>
                     メンバー
                   </div>
-                  {employeeList(members)}
+                  <EmployeeList employees={members} />
                 </Droppable>
               </>
             )}

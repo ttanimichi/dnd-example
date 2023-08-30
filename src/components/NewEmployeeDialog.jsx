@@ -127,8 +127,8 @@ export default function EmployeeInfoDialog({ open, setOpen, dept }) {
           })
         );
       }
-      if (d.children && d.children.length > 0) {
-        addEmployee(d.children);
+      if (d.branches && d.branches.length > 0) {
+        addEmployee(d.branches);
       }
     });
   };

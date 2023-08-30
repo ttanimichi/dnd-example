@@ -101,8 +101,8 @@ export default function EmployeeInfoDialog({ open, setOpen, employee }) {
     depts.forEach((dept) => {
       dept.members.forEach(_updateEmployee);
       dept.managers.forEach(_updateEmployee);
-      if (dept.children && dept.children.length > 0) {
-        updateEmployee(dept.children);
+      if (dept.branches && dept.branches.length > 0) {
+        updateEmployee(dept.branches);
       }
     });
   };

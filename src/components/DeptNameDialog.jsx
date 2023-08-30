@@ -8,14 +8,13 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import Box from "@mui/material/Box";
+import toSuffix from "../utils/toSuffix";
 
 import SetDepartmentsContext from "../utils/SetDepartmentsContext";
 
 export default function DeptNameDialog({ open, setOpen, dept }) {
   const setDepartments = useContext(SetDepartmentsContext);
-
-  const suffix = dept.suffix;
-
+  const suffix = toSuffix(dept.level);
   const [deptName, setDeptName] = useState(dept.deptName);
 
   const handleClose = () => {
@@ -27,8 +26,8 @@ export default function DeptNameDialog({ open, setOpen, dept }) {
       if (d.id === dept.id) {
         d.name = deptName;
       }
-      if (d.children && d.children.length > 0) {
-        updateDeptName(d.children);
+      if (d.branches && d.branches.length > 0) {
+        updateDeptName(d.branches);
       }
     });
   };

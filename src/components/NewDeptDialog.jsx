@@ -26,18 +26,18 @@ export default function NewDeptDialog({ open, setOpen, dept }) {
   const addDept = (depts) => {
     depts.forEach((d) => {
       if (d.id === dept.id) {
-        d.children.push({
+        d.branches.push({
           id: crypto.randomUUID(),
           name: deptName,
           managers: [],
           members: [],
-          children: [],
+          branches: [],
           level: d.level + 1,
           suffix,
         });
       }
-      if (d.children && d.children.length > 0) {
-        addDept(d.children);
+      if (d.branches && d.branches.length > 0) {
+        addDept(d.branches);
       }
     });
   };

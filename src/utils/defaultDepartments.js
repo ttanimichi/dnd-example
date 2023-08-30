@@ -4,29 +4,29 @@ import { createEmployees } from "./createEmployees";
 const defaultDepartments = [
   {
     name: "株式会社イグザンプル",
-    children: [
+    branches: [
       {
         name: "管理",
-        children: [
+        branches: [
           {
             name: "人事",
-            children: [
+            branches: [
               {
                 name: "労務",
-                children: [],
+                branches: [],
               },
               {
                 name: "採用",
-                children: [],
+                branches: [],
               },
             ],
           },
           {
             name: "総務",
-            children: [
+            branches: [
               {
                 name: "庶務",
-                children: [],
+                branches: [],
               },
             ],
           },
@@ -34,30 +34,30 @@ const defaultDepartments = [
       },
       {
         name: "営業",
-        children: [
+        branches: [
           {
             name: "営業第一",
-            children: [
+            branches: [
               {
                 name: "法人営業",
-                children: [],
+                branches: [],
               },
               {
                 name: "新規営業",
-                children: [],
+                branches: [],
               },
             ],
           },
           {
             name: "営業第二",
-            children: [
+            branches: [
               {
                 name: "企画営業",
-                children: [],
+                branches: [],
               },
               {
                 name: "販売推進",
-                children: [],
+                branches: [],
               },
             ],
           },
@@ -73,8 +73,8 @@ function buildDepartments(depts) {
     dept.managers = createEmployees(1);
     dept.members = createEmployees(2);
 
-    if (dept.children && dept.children.length > 0) {
-      buildDepartments(dept.children);
+    if (dept.branches && dept.branches.length > 0) {
+      buildDepartments(dept.branches);
     }
   });
 }
