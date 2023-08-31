@@ -6,18 +6,21 @@ export default function EmployeeList({ employees }) {
   );
 
   if (employees.length > 0) {
-    return employees.map(({ id, name, grade, personMonth, avatar }) => {
-      return (
-        <Employee
-          key={id}
-          id={id}
-          name={name}
-          grade={grade}
-          personMonth={personMonth}
-          avatar={avatar}
-        />
-      );
-    });
+    return employees.map(
+      ({ id, name, grade, personMonth, avatar, secondaryRole }) => {
+        return (
+          <Employee
+            key={id}
+            id={id}
+            name={name}
+            grade={grade}
+            personMonth={personMonth}
+            avatar={avatar}
+            secondaryRole={secondaryRole}
+          />
+        );
+      }
+    );
   } else {
     return noDataFound;
   }

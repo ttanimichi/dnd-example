@@ -4,7 +4,7 @@ import Stack from "@mui/material/Stack";
 import EmployeeMenu from "./EmployeeMenu";
 
 export default function Employee(props) {
-  const { id, name, grade, personMonth, avatar } = props;
+  const { id, name, grade, personMonth, avatar, secondaryRole } = props;
 
   return (
     <div key={id} style={{ paddingBottom: 10 }}>
@@ -22,7 +22,11 @@ export default function Employee(props) {
             <div style={{ fontWeight: "bold" }}>{name}</div>
             <Stack direction="row" spacing={1}>
               <Chip label={grade} size="small" />
-              <Chip label={`人月${personMonth}`} size="small" />
+              {secondaryRole ? (
+                <Chip label="兼任" size="small" />
+              ) : (
+                <Chip label={`人月${personMonth}`} size="small" />
+              )}
             </Stack>
           </Stack>
           <span style={{ width: 10 }} />
