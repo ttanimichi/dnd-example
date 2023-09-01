@@ -1,3 +1,4 @@
+import { useState, useContext } from "react";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import Dialog from "@mui/material/Dialog";
@@ -5,15 +6,14 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
-
-import * as React from "react";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
-
 import Stack from "@mui/material/Stack";
 import Box from "@mui/material/Box";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Checkbox from "@mui/material/Checkbox";
 
 import SetDepartmentsContext from "../utils/SetDepartmentsContext";
 
@@ -79,11 +79,25 @@ function PersonMonthSelect({ personMonth, setPersonMonth }) {
 }
 
 export default function EmployeeInfoDialog({ open, setOpen, employee }) {
-  const setDepartments = React.useContext(SetDepartmentsContext);
+  const setDepartments = useContext(SetDepartmentsContext);
 
-  const [grade, setGrade] = React.useState(employee.grade);
-  const [personMonth, setPersonMonth] = React.useState(employee.personMonth);
-  const [name, setName] = React.useState(employee.name);
+  const [grade, setGrade] = useState(employee.grade);
+  const [personMonth, setPersonMonth] = useState(employee.personMonth);
+  const [name, setName] = useState(employee.name);
+  const [isRetired, setIsRetired] = useState(!!employee.isRetired);
+  const [isSuspended, setIsSuspended] = useState(!!employee.isSuspended);
+
+  const handleRetired = (event) => {
+    const checked = event.target.checked;
+    setIsRetired(checked);
+    if (checked) setIsSuspended(false);
+  };
+
+  const handleSuspended = (event) => {
+    const checked = event.target.checked;
+    setIsSuspended(checked);
+    if (checked) setIsRetired(false);
+  };
 
   const handleClose = () => {
     setOpen(false);
@@ -94,6 +108,8 @@ export default function EmployeeInfoDialog({ open, setOpen, employee }) {
       member.grade = grade;
       member.personMonth = personMonth;
       member.name = name;
+      member.isRetired = isRetired;
+      member.isSuspended = isSuspended;
     }
   };
 
@@ -146,6 +162,30 @@ export default function EmployeeInfoDialog({ open, setOpen, employee }) {
               setPersonMonth={setPersonMonth}
             />
           </Stack>
+          <div
+            style={{ marginTop: 10, display: "flex", flexDirection: "column" }}
+          >
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={isSuspended}
+                  onChange={handleSuspended}
+                  inputProps={{ "aria-label": "controlled" }}
+                />
+              }
+              label="休職中"
+            />
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={isRetired}
+                  onChange={handleRetired}
+                  inputProps={{ "aria-label": "controlled" }}
+                />
+              }
+              label="退職済み"
+            />
+          </div>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>キャンセル</Button>

@@ -7,7 +7,16 @@ export default function EmployeeList({ employees }) {
 
   if (employees.length > 0) {
     return employees.map(
-      ({ id, name, grade, personMonth, avatar, secondaryRole }) => {
+      ({
+        id,
+        name,
+        grade,
+        personMonth,
+        avatar,
+        secondaryRole,
+        isRetired,
+        isSuspended,
+      }) => {
         return (
           <Employee
             key={id}
@@ -17,6 +26,8 @@ export default function EmployeeList({ employees }) {
             personMonth={personMonth}
             avatar={avatar}
             secondaryRole={secondaryRole}
+            isRetired={isRetired}
+            isSuspended={isSuspended}
           />
         );
       }

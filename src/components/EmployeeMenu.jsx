@@ -120,8 +120,6 @@ export default function EmployeeMenu({ employee }) {
           >
             従業員情報を編集
           </MenuItem>
-          <MenuItem onClick={handleClose}>退職</MenuItem>
-          <MenuItem onClick={handleClose}>休職</MenuItem>
           <MenuItem onClick={handleMultipleRoles}>複製（兼任用）</MenuItem>
         </Menu>
         <EmployeeInfoDialog
