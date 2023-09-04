@@ -6,10 +6,10 @@ import OrganizationChart from "./OrganizationChart";
 import TargetContext from "../utils/TargetContext";
 import SetTargetContext from "../utils/setTargetContext";
 import SetDepartmentsContext from "../utils/SetDepartmentsContext";
-import defaultDepartments from "../utils/defaultDepartments";
+import useDepartments from "../utils/useDepartments";
 
 export default function App() {
-  const [departments, setDepartments] = useState(defaultDepartments);
+  const [departments, setDepartments] = useDepartments();
   const [target, setTarget] = useState(null);
 
   return (
