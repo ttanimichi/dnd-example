@@ -145,10 +145,7 @@ export default function OrganizationChart({ departments }) {
 
   function addMember(depts, overId, employee) {
     if (typeof overId !== "string") return;
-
-    const o = overId.split("/");
-    const type = o[0];
-    const deptId = o[1];
+    const [type, deptId] = overId.split("/");
 
     depts.forEach((dept) => {
       if (dept.id === deptId) {
