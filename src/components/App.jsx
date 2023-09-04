@@ -16,7 +16,7 @@ export default function App() {
     <TargetContext.Provider value={target}>
       <SetTargetContext.Provider value={setTarget}>
         <SetDepartmentsContext.Provider value={setDepartments}>
-          <Header />
+          <Header departments={departments} />
           <OrganizationChart departments={departments} />
         </SetDepartmentsContext.Provider>
       </SetTargetContext.Provider>

@@ -11,9 +11,36 @@ import UndoIcon from "@mui/icons-material/Undo";
 import RedoIcon from "@mui/icons-material/Redo";
 import SetDepartmentsContext from "../utils/SetDepartmentsContext";
 import initialDepartments from "../utils/initialDepartments";
+import UploadIcon from "@mui/icons-material/Upload";
+import DownloadIcon from "@mui/icons-material/Download";
 
-export default function Header() {
+export default function Header({ departments }) {
   const setDepartments = useContext(SetDepartmentsContext);
+
+  const handleExport = () => {
+    const dataStr =
+      "data:text/json;charset=utf-8," +
+      encodeURIComponent(JSON.stringify(departments, null, 4));
+    const dlAnchorElem = document.createElement("a");
+    dlAnchorElem.setAttribute("href", dataStr);
+    dlAnchorElem.setAttribute("download", "state.txt");
+    dlAnchorElem.click();
+  };
+
+  const handleImport = () => {
+    const input = document.createElement("input");
+    input.type = "file";
+    input.onchange = (e) => {
+      const file = e.target.files[0];
+      const reader = new FileReader();
+      reader.readAsText(file, "UTF-8");
+      reader.onload = (readerEvent) => {
+        const content = readerEvent.target.result;
+        setDepartments(JSON.parse(content));
+      };
+    };
+    input.click();
+  };
 
   return (
     <Box sx={{ flexGrow: 1, position: "fixed", width: "100vw" }}>
@@ -28,6 +55,22 @@ export default function Header() {
             </Button>
             <Button color="inherit" variant="outlined" startIcon={<RedoIcon />}>
               進む
+            </Button>
+            <Button
+              color="inherit"
+              variant="outlined"
+              startIcon={<DownloadIcon />}
+              onClick={handleExport}
+            >
+              エクスポート
+            </Button>
+            <Button
+              color="inherit"
+              variant="outlined"
+              startIcon={<UploadIcon />}
+              onClick={handleImport}
+            >
+              インポート
             </Button>
             <Button
               color="inherit"
