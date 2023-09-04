@@ -1,3 +1,4 @@
+import { useContext } from "react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
@@ -8,8 +9,12 @@ import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import Stack from "@mui/material/Stack";
 import UndoIcon from "@mui/icons-material/Undo";
 import RedoIcon from "@mui/icons-material/Redo";
+import SetDepartmentsContext from "../utils/SetDepartmentsContext";
+import initialDepartments from "../utils/initialDepartments";
 
 export default function Header() {
+  const setDepartments = useContext(SetDepartmentsContext);
+
   return (
     <Box sx={{ flexGrow: 1, position: "fixed", width: "100vw" }}>
       <AppBar position="static">
@@ -28,6 +33,9 @@ export default function Header() {
               color="inherit"
               variant="outlined"
               startIcon={<FactoryIcon />}
+              onClick={() => {
+                setDepartments(initialDepartments);
+              }}
             >
               初期状態にリセット
             </Button>

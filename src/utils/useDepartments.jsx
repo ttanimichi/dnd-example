@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import defaultDepartments from "./defaultDepartments";
+import initialDepartments from "./initialDepartments";
 
 // TODO: superjson を導入して Date 等の型にも対応する
 // ref. https://github.com/blitz-js/superjson
@@ -16,5 +16,5 @@ export default function useDepartments() {
 }
 
 function getDepartments() {
-  return JSON.parse(localStorage.getItem("departments")) || defaultDepartments;
+  return JSON.parse(localStorage.getItem("departments")) || initialDepartments;
 }
