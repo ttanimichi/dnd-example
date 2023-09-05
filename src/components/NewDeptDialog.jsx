@@ -57,7 +57,9 @@ export default function NewDeptDialog({ open, setOpen, dept }) {
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>新規部署を作成</DialogTitle>
         <DialogContent>
-          <DialogContentText>以下の項目を入力してください。</DialogContentText>
+          <DialogContentText>
+            新規部署を作成します。以下の項目を入力して右下の「保存する」ボタンを押してください。
+          </DialogContentText>
           <Box sx={{ height: 10 }} />
           <div style={{ display: "flex", alignItems: "center" }}>
             <TextField
@@ -74,7 +76,7 @@ export default function NewDeptDialog({ open, setOpen, dept }) {
               }}
             />
             <div
-              style={{ width: 60, display: "flex", justifyContent: "center" }}
+              style={{ width: 100, display: "flex", justifyContent: "center" }}
             >
               {suffix}
             </div>

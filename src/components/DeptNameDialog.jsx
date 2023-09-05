@@ -47,7 +47,9 @@ export default function DeptNameDialog({ open, setOpen, dept }) {
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>部署名を編集</DialogTitle>
         <DialogContent>
-          <DialogContentText>以下の項目を入力してください。</DialogContentText>
+          <DialogContentText>
+            部署名を編集します。以下の項目を入力して右下の「保存する」ボタンを押してください。
+          </DialogContentText>
           <Box sx={{ height: 10 }} />
           <div style={{ display: "flex", alignItems: "center" }}>
             <TextField
@@ -64,7 +66,7 @@ export default function DeptNameDialog({ open, setOpen, dept }) {
               }}
             />
             <div
-              style={{ width: 60, display: "flex", justifyContent: "center" }}
+              style={{ width: 100, display: "flex", justifyContent: "center" }}
             >
               {suffix}
             </div>
