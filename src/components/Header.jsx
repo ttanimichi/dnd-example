@@ -14,7 +14,7 @@ import initialDepartments from "../utils/initialDepartments";
 import UploadIcon from "@mui/icons-material/Upload";
 import DownloadIcon from "@mui/icons-material/Download";
 
-export default function Header({ departments }) {
+export default function Header({ departments, undo, redo }) {
   const setDepartments = useContext(SetDepartmentsContext);
 
   const handleExport = () => {
@@ -36,7 +36,7 @@ export default function Header({ departments }) {
       reader.readAsText(file, "UTF-8");
       reader.onload = (readerEvent) => {
         const content = readerEvent.target.result;
-        setDepartments(JSON.parse(content));
+        setDepartments(() => JSON.parse(content));
       };
     };
     input.click();
@@ -50,10 +50,20 @@ export default function Header({ departments }) {
             ドラッグ＆ドロップできる組織図
           </Typography>
           <Stack spacing={2} direction="row">
-            <Button color="inherit" variant="outlined" startIcon={<UndoIcon />}>
+            <Button
+              color="inherit"
+              variant="outlined"
+              startIcon={<UndoIcon />}
+              onClick={undo}
+            >
               戻る
             </Button>
-            <Button color="inherit" variant="outlined" startIcon={<RedoIcon />}>
+            <Button
+              color="inherit"
+              variant="outlined"
+              startIcon={<RedoIcon />}
+              onClick={redo}
+            >
               進む
             </Button>
             <Button
@@ -77,7 +87,7 @@ export default function Header({ departments }) {
               variant="outlined"
               startIcon={<FactoryIcon />}
               onClick={() => {
-                setDepartments(initialDepartments);
+                setDepartments(() => initialDepartments);
               }}
             >
               初期状態にリセット
