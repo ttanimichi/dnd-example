@@ -7,9 +7,60 @@ import toSuffix from "../utils/toSuffix";
 import EmployeeList from "./employeeList";
 
 export default function Department(dept) {
-  const { id, deptName, managers, members, level } = dept;
+  const { id, deptName, managers, members, level, collapse } = dept;
   const target = useContext(TargetContext);
   let suffix = toSuffix(level);
+
+  const DeptHeader = () => (
+    <div
+      style={{
+        padding: 10,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "space-between",
+      }}
+    >
+      <div>{`${deptName}${suffix}`}</div>
+      <DeptMenu dept={dept} />
+    </div>
+  );
+
+  const DeptBody = () => (
+    <div style={{ borderTop: "1px solid grey" }}>
+      {level === 0 ? (
+        <>
+          <Droppable
+            key={`members/${id}`}
+            id={`members/${id}`}
+            disabled={target !== "employee"}
+          >
+            <div style={{ height: 10 }}></div>
+            <EmployeeList employees={members} />
+          </Droppable>
+        </>
+      ) : (
+        <>
+          <Droppable
+            key={`managers/${id}`}
+            id={`managers/${id}`}
+            disabled={target !== "employee"}
+          >
+            <div style={{ paddingTop: 10, paddingBottom: 10 }}>部門長</div>
+            <EmployeeList employees={managers} />
+          </Droppable>
+          <hr style={{ margin: 0 }} />
+          <Droppable
+            key={`members/${id}`}
+            id={`members/${id}`}
+            disabled={target !== "employee"}
+          >
+            <div style={{ paddingTop: 10, paddingBottom: 10 }}>メンバー</div>
+            <EmployeeList employees={members} />
+          </Droppable>
+        </>
+      )}
+    </div>
+  );
 
   return (
     <Droppable
@@ -31,56 +82,8 @@ export default function Department(dept) {
           }}
           key={deptName}
         >
-          <div
-            style={{
-              borderBottom: "1px solid grey",
-              padding: 10,
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "space-between",
-            }}
-          >
-            <div>{`${deptName}${suffix}`}</div>
-            <DeptMenu dept={dept} />
-          </div>
-          <div>
-            {level === 0 ? (
-              <>
-                <Droppable
-                  key={`members/${id}`}
-                  id={`members/${id}`}
-                  disabled={target !== "employee"}
-                >
-                  <div style={{ height: 10 }}></div>
-                  <EmployeeList employees={members} />
-                </Droppable>
-              </>
-            ) : (
-              <>
-                <Droppable
-                  key={`managers/${id}`}
-                  id={`managers/${id}`}
-                  disabled={target !== "employee"}
-                >
-                  <div style={{ paddingTop: 10, paddingBottom: 10 }}>
-                    部門長
-                  </div>
-                  <EmployeeList employees={managers} />
-                </Droppable>
-                <hr style={{ margin: 0 }} />
-                <Droppable
-                  key={`members/${id}`}
-                  id={`members/${id}`}
-                  disabled={target !== "employee"}
-                >
-                  <div style={{ paddingTop: 10, paddingBottom: 10 }}>
-                    メンバー
-                  </div>
-                  <EmployeeList employees={members} />
-                </Droppable>
-              </>
-            )}
-          </div>
+          <DeptHeader />
+          {collapse ? null : <DeptBody />}
         </div>
       </Draggable>
     </Droppable>

@@ -13,6 +13,8 @@ import SetDepartmentsContext from "../utils/SetDepartmentsContext";
 import initialDepartments from "../utils/initialDepartments";
 import UploadIcon from "@mui/icons-material/Upload";
 import DownloadIcon from "@mui/icons-material/Download";
+import UnfoldLessIcon from "@mui/icons-material/UnfoldLess";
+import UnfoldMoreIcon from "@mui/icons-material/UnfoldMore";
 
 export default function Header({ departments, undo, redo }) {
   const setDepartments = useContext(SetDepartmentsContext);
@@ -40,6 +42,32 @@ export default function Header({ departments, undo, redo }) {
       };
     };
     input.click();
+  };
+
+  // TODO: 再帰処理を関数間で共通化する
+  const changeCollapse = (departments, flag) => {
+    departments.forEach((d) => {
+      d.collapse = flag;
+      if (d.branches && d.branches.length > 0) {
+        changeCollapse(d.branches, flag);
+      }
+    });
+  };
+
+  const handleCollapse = () => {
+    setDepartments((prev) => {
+      const newDepartments = structuredClone(prev);
+      changeCollapse(newDepartments, true);
+      return newDepartments;
+    });
+  };
+
+  const handleExpand = () => {
+    setDepartments((prev) => {
+      const newDepartments = structuredClone(prev);
+      changeCollapse(newDepartments, false);
+      return newDepartments;
+    });
   };
 
   return (
@@ -85,6 +113,22 @@ export default function Header({ departments, undo, redo }) {
             <Button
               color="inherit"
               variant="outlined"
+              startIcon={<UnfoldLessIcon />}
+              onClick={handleCollapse}
+            >
+              折りたたみ
+            </Button>
+            <Button
+              color="inherit"
+              variant="outlined"
+              startIcon={<UnfoldMoreIcon />}
+              onClick={handleExpand}
+            >
+              展開
+            </Button>
+            <Button
+              color="inherit"
+              variant="outlined"
               startIcon={<FactoryIcon />}
               onClick={() => {
                 setDepartments(() => initialDepartments);
@@ -92,6 +136,7 @@ export default function Header({ departments, undo, redo }) {
             >
               初期状態にリセット
             </Button>
+
             <Button
               color="inherit"
               variant="outlined"
