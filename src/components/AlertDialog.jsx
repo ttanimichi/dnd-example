@@ -19,7 +19,7 @@ export default function AlertDialog({
     <div>
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>{title}</DialogTitle>
-        <DialogContent>
+        <DialogContent dividers={true}>
           <DialogContentText>{message}</DialogContentText>
         </DialogContent>
         <DialogActions>

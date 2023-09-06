@@ -56,7 +56,7 @@ export default function NewDeptDialog({ open, setOpen, dept }) {
     <div>
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>新規部署を作成</DialogTitle>
-        <DialogContent>
+        <DialogContent dividers={true}>
           <DialogContentText>
             新規部署を作成します。以下の項目を入力して右下の「保存する」ボタンを押してください。
           </DialogContentText>

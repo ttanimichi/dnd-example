@@ -137,7 +137,7 @@ export default function EmployeeInfoDialog({ open, setOpen, employee }) {
     <div>
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>従業員情報を編集</DialogTitle>
-        <DialogContent>
+        <DialogContent dividers={true}>
           <DialogContentText>
             以下の従業員情報を入力してください。
           </DialogContentText>

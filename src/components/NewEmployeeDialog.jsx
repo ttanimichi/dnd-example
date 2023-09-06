@@ -147,7 +147,7 @@ export default function EmployeeInfoDialog({ open, setOpen, dept }) {
     <div>
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>新入社員を追加</DialogTitle>
-        <DialogContent>
+        <DialogContent dividers={true}>
           <DialogContentText>
             以下の項目を入力してください（従業員名は「UIデザイナー」「IT統制責任者候補」など仮の呼称でも問題ありません）
           </DialogContentText>

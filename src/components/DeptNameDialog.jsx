@@ -46,7 +46,7 @@ export default function DeptNameDialog({ open, setOpen, dept }) {
     <div>
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>部署名を編集</DialogTitle>
-        <DialogContent>
+        <DialogContent dividers={true}>
           <DialogContentText>
             部署名を編集します。以下の項目を入力して右下の「保存する」ボタンを押してください。
           </DialogContentText>
