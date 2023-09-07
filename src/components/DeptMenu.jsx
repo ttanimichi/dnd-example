@@ -62,6 +62,23 @@ export default function DeptMenu({ dept }) {
       }
     });
   };
+  const handleCollapse = () => {
+    setDepartments((prev) => {
+      const newDepts = structuredClone(prev);
+      collapseOrExpand(newDepts);
+      return newDepts;
+    });
+    handleClose();
+  };
+  const collapseOrExpand = (depts) => {
+    depts.forEach((d) => {
+      if (d.id === dept.id) {
+        d.collapse = !d.collapse;
+      } else if (d.branches && d.branches.length > 0) {
+        collapseOrExpand(d.branches);
+      }
+    });
+  };
 
   return (
     <div>
@@ -88,6 +105,7 @@ export default function DeptMenu({ dept }) {
         <MenuItem onClick={openDeleteDeptDialog}>この部署を廃止</MenuItem>
         <MenuItem onClick={openDeptNameDialog}>部署名を編集</MenuItem>
         <MenuItem onClick={openNewDeptDialog}>直下に部署を追加</MenuItem>
+        <MenuItem onClick={handleCollapse}>折りたたみ・展開</MenuItem>
       </Menu>
       <DeptNameDialog
         open={deptNameDialogOpen}

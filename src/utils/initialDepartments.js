@@ -1,7 +1,7 @@
 import updateLevel from "./updateLevel";
 import { createEmployees } from "./createEmployees";
 
-const defaultDepartments = [
+const initialDepartments = [
   {
     name: "株式会社イグザンプル",
     branches: [
@@ -79,11 +79,11 @@ function buildDepartments(depts) {
   });
 }
 
-buildDepartments(defaultDepartments);
+buildDepartments(initialDepartments);
 
 // The top level department doesn't have managers
-defaultDepartments[0].managers = [];
+initialDepartments[0].managers = [];
 
-updateLevel(defaultDepartments);
+updateLevel(initialDepartments);
 
-export default defaultDepartments;
+export default initialDepartments;

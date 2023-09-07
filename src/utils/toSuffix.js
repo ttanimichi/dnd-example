@@ -5,13 +5,13 @@ export default function toSuffix(level) {
     case 0:
       break;
     case 1:
-      suffix = "本部";
+      suffix = "グループ";
       break;
     case 2:
-      suffix = "部";
+      suffix = "ユニット";
       break;
     default:
-      suffix = "課";
+      suffix = "チーム";
   }
 
   return suffix;

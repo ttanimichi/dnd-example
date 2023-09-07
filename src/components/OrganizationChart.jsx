@@ -28,7 +28,15 @@ export default function OrganizationChart({ departments }) {
     </DndContext>
   );
 
-  function renderDepartment({ id, name, level, managers, members, branches }) {
+  function renderDepartment({
+    id,
+    name,
+    level,
+    managers,
+    members,
+    branches,
+    collapse,
+  }) {
     return (
       <div key={id} style={{ display: "flex", alignItems: "flex-start" }}>
         <Department
@@ -38,6 +46,7 @@ export default function OrganizationChart({ departments }) {
           managers={managers}
           members={members}
           branches={branches}
+          collapse={collapse}
         />
         <div>{branches.map(renderDepartment)}</div>
       </div>
