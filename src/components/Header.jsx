@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
@@ -15,9 +15,11 @@ import UploadIcon from "@mui/icons-material/Upload";
 import DownloadIcon from "@mui/icons-material/Download";
 import UnfoldLessIcon from "@mui/icons-material/UnfoldLess";
 import UnfoldMoreIcon from "@mui/icons-material/UnfoldMore";
+import ShoppingCartDialog from "./ShoppingCartDialog";
 
 export default function Header({ departments, undo, redo }) {
   const setDepartments = useContext(SetDepartmentsContext);
+  const [shoppingCartDialogOpen, setShoppingCartDialogOpen] = useState(false);
 
   const handleExport = () => {
     const dataStr =
@@ -136,17 +138,24 @@ export default function Header({ departments, undo, redo }) {
             >
               初期状態にリセット
             </Button>
-
             <Button
               color="inherit"
               variant="outlined"
               startIcon={<ShoppingCartIcon />}
+              onClick={() => {
+                setShoppingCartDialogOpen(true);
+              }}
             >
               買い物かご
             </Button>
           </Stack>
         </Toolbar>
       </AppBar>
+      <ShoppingCartDialog
+        open={shoppingCartDialogOpen}
+        setOpen={setShoppingCartDialogOpen}
+        dept={departments}
+      />
     </Box>
   );
 }
