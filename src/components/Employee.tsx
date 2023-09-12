@@ -1,20 +1,30 @@
+import { FC } from "react";
 import { Draggable } from "./Draggable";
 import Chip from "@mui/material/Chip";
 import Stack from "@mui/material/Stack";
 import EmployeeMenu from "./EmployeeMenu";
 
-export default function Employee(props) {
-  const {
-    id,
-    name,
-    grade,
-    personMonth,
-    avatar,
-    secondaryRole,
-    isRetired,
-    isSuspended,
-  } = props;
+export type EmployeeProps = {
+  id: string;
+  name: string;
+  grade: string;
+  personMonth: string;
+  avatar: string;
+  secondaryRole?: boolean;
+  isRetired?: boolean;
+  isSuspended?: boolean;
+};
 
+const Employee: FC<EmployeeProps> = ({
+  id,
+  name,
+  grade,
+  personMonth,
+  avatar,
+  secondaryRole,
+  isRetired,
+  isSuspended,
+}) => {
   const nameStyle =
     isRetired || isSuspended
       ? { textDecoration: "line-through" }
@@ -50,10 +60,12 @@ export default function Employee(props) {
             </Stack>
           </Stack>
           <span style={{ width: 10 }} />
-          <EmployeeMenu employee={props} />
+          <EmployeeMenu employee={{ id, name, grade, personMonth, avatar, secondaryRole, isRetired, isSuspended }} />
           <span style={{ width: 10 }} />
         </div>
       </Draggable>
     </div>
   );
 }
+
+export default Employee;

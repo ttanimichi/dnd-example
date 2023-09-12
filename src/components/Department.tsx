@@ -1,17 +1,29 @@
-import { useContext } from "react";
+import { FC, useContext } from "react";
 import { Droppable } from "./Droppable";
 import { Draggable } from "./Draggable";
 import TargetContext from "../utils/TargetContext";
 import DeptMenu from "./DeptMenu";
 import toSuffix from "../utils/toSuffix";
 import EmployeeList from "./employeeList";
+import { EmployeeProps } from "./Employee";
 
-export default function Department(dept) {
-  const { id, deptName, managers, members, level, collapse } = dept;
+export type DepartmentProps = {
+  id: string | number;
+  deptName: string;
+  level: number;
+  collapse: boolean;
+  members: EmployeeProps[];
+  managers: EmployeeProps[];
+  branches: DepartmentProps[];
+};
+
+const Department: FC<DepartmentProps> = ({ 
+  id, deptName, managers, members, level, collapse 
+}) => {
   const target = useContext(TargetContext);
-  let suffix = toSuffix(level);
+  const suffix = toSuffix(level);
 
-  const DeptHeader = () => (
+  const DeptHeader: FC = () => (
     <div
       style={{
         padding: 10,
@@ -21,11 +33,11 @@ export default function Department(dept) {
       }}
     >
       <div>{`${deptName}${suffix}`}</div>
-      <DeptMenu dept={dept} />
+      <DeptMenu dept={{id, deptName, managers, members, level, collapse}} />
     </div>
   );
 
-  const DeptBody = () => (
+  const DeptBody: FC = () => (
     <div style={{ borderTop: "1px solid grey" }}>
       {level === 0 ? (
         <>
@@ -89,3 +101,5 @@ export default function Department(dept) {
     </Droppable>
   );
 }
+
+export default Department;
