@@ -3,7 +3,7 @@ import Button from "@mui/material/Button";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import EmployeeInfoDialog from "./EmployeeInfoDialog";
-import SetDepartmentsContext from "../utils/SetDepartmentsContext";
+import SetDepartmentsContext, { SetDepartmentsStateType } from "../utils/SetDepartmentsContext";
 import { EmployeeProps } from "./Employee";
 import { DepartmentProps } from "./Department";
 
@@ -12,10 +12,12 @@ type Props = {
 }
 
 export default function EmployeeMenu({ employee }: Props) {
-  const setDepartments = useContext(SetDepartmentsContext);
-
   const [dialogOpen, setDialogOpen] = useState<boolean>(false);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+
+  const setDepartments = useContext<SetDepartmentsStateType>(SetDepartmentsContext);
+  if (setDepartments === null) return null;
+
   const open = Boolean(anchorEl);
 
   const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
