@@ -1,11 +1,19 @@
-import React from "react";
+import { ReactNode } from "react";
 import { useDraggable } from "@dnd-kit/core";
 
-export function Draggable(props) {
+type Props = {
+  id: string;
+  data: {
+    type: string;
+  };
+  children: ReactNode;
+};
+
+export function Draggable({ id, data, children }: Props) {
   const { isDragging, attributes, listeners, setNodeRef, transform } =
     useDraggable({
-      id: props.id,
-      data: props.data,
+      id,
+      data,
     });
 
   const style = transform
@@ -17,7 +25,7 @@ export function Draggable(props) {
 
   return (
     <div ref={setNodeRef} style={style} {...listeners} {...attributes}>
-      {props.children}
+      {children}
     </div>
   );
 }
