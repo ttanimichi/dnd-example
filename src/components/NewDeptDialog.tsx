@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { FC, useContext, useState } from "react";
 
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
@@ -9,21 +9,29 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import Box from "@mui/material/Box";
 
-import SetDepartmentsContext from "../utils/SetDepartmentsContext";
+import SetDepartmentsContext, { SetDepartmentsStateType } from "../utils/SetDepartmentsContext";
 import toSuffix from "../utils/toSuffix";
+import { DepartmentProps } from "../components/Department";
 
-export default function NewDeptDialog({ open, setOpen, dept }) {
-  const setDepartments = useContext(SetDepartmentsContext);
+type Props = {
+  open: boolean;
+  setOpen: (open: boolean) => void;
+  dept: DepartmentProps;
+}
 
-  const suffix = toSuffix(dept.level + 1);
+const NewDeptDialog: FC<Props> = ({ open, setOpen, dept }) => {
+  const [deptName, setDeptName] = useState<string>("");
 
-  const [deptName, setDeptName] = useState("");
+  const setDepartments = useContext<SetDepartmentsStateType>(SetDepartmentsContext);
+  if (setDepartments === null) return null;
+
+  const suffix: string = toSuffix(dept.level + 1);
 
   const handleClose = () => {
     setOpen(false);
   };
 
-  const addDept = (depts) => {
+  const addDept = (depts: DepartmentProps[]) => {
     depts.forEach((d) => {
       if (d.id === dept.id) {
         d.branches.push({
@@ -89,4 +97,6 @@ export default function NewDeptDialog({ open, setOpen, dept }) {
       </Dialog>
     </div>
   );
-}
+};
+
+export default NewDeptDialog;
