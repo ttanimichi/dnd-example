@@ -20,7 +20,7 @@ type Props = {
 }
 
 const NewDeptDialog: FC<Props> = ({ open, setOpen, dept }) => {
-  const [deptName, setDeptName] = useState<string>("");
+  const [name, setName] = useState<string>("");
 
   const setDepartments = useContext<SetDepartmentsStateType>(SetDepartmentsContext);
   if (setDepartments === null) return null;
@@ -36,12 +36,12 @@ const NewDeptDialog: FC<Props> = ({ open, setOpen, dept }) => {
       if (d.id === dept.id) {
         d.branches.push({
           id: crypto.randomUUID(),
-          name: deptName,
+          name,
           managers: [],
           members: [],
           branches: [],
           level: d.level + 1,
-          suffix,
+          collapse: false,
         });
       }
       if (d.branches && d.branches.length > 0) {
@@ -78,9 +78,9 @@ const NewDeptDialog: FC<Props> = ({ open, setOpen, dept }) => {
               type="text"
               fullWidth
               variant="standard"
-              value={deptName}
+              value={name}
               onChange={(event) => {
-                setDeptName(event.target.value);
+                setName(event.target.value);
               }}
             />
             <div

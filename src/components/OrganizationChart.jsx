@@ -41,7 +41,7 @@ export default function OrganizationChart({ departments }) {
       <div key={id} style={{ display: "flex", alignItems: "flex-start" }}>
         <Department
           id={id}
-          deptName={name}
+          name={name}
           level={level}
           managers={managers}
           members={members}

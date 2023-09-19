@@ -9,7 +9,7 @@ import { EmployeeProps } from "./Employee";
 
 export type DepartmentProps = {
   id: string | number;
-  deptName: string;
+  name: string;
   level: number;
   collapse: boolean;
   members: EmployeeProps[];
@@ -18,7 +18,7 @@ export type DepartmentProps = {
 };
 
 const Department: FC<DepartmentProps> = ({ 
-  id, deptName, managers, members, level, collapse 
+  id, name, managers, members, level, collapse, branches
 }) => {
   const target = useContext(TargetContext);
   const suffix = toSuffix(level);
@@ -32,8 +32,8 @@ const Department: FC<DepartmentProps> = ({
         justifyContent: "space-between",
       }}
     >
-      <div>{`${deptName}${suffix}`}</div>
-      <DeptMenu dept={{id, deptName, managers, members, level, collapse}} />
+      <div>{`${name}${suffix}`}</div>
+      <DeptMenu dept={{id, name, managers, members, level, collapse, branches}} />
     </div>
   );
 
@@ -92,7 +92,7 @@ const Department: FC<DepartmentProps> = ({
             border: "1px solid grey",
             width: "360px",
           }}
-          key={deptName}
+          key={name}
         >
           <DeptHeader />
           {collapse ? null : <DeptBody />}

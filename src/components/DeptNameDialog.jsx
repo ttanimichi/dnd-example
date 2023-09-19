@@ -15,7 +15,7 @@ import SetDepartmentsContext from "../utils/SetDepartmentsContext";
 export default function DeptNameDialog({ open, setOpen, dept }) {
   const setDepartments = useContext(SetDepartmentsContext);
   const suffix = toSuffix(dept.level);
-  const [deptName, setDeptName] = useState(dept.deptName);
+  const [name, setName] = useState(dept.name);
 
   const handleClose = () => {
     setOpen(false);
@@ -24,7 +24,7 @@ export default function DeptNameDialog({ open, setOpen, dept }) {
   const updateDeptName = (depts) => {
     depts.forEach((d) => {
       if (d.id === dept.id) {
-        d.name = deptName;
+        d.name = name;
       }
       if (d.branches && d.branches.length > 0) {
         updateDeptName(d.branches);
@@ -60,9 +60,9 @@ export default function DeptNameDialog({ open, setOpen, dept }) {
               type="text"
               fullWidth
               variant="standard"
-              value={deptName}
+              value={name}
               onChange={(event) => {
-                setDeptName(event.target.value);
+                setName(event.target.value);
               }}
             />
             <div
