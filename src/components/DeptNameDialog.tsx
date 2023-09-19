@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { FC, useContext, useState } from "react";
 
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
@@ -9,19 +9,26 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import Box from "@mui/material/Box";
 import toSuffix from "../utils/toSuffix";
+import SetDepartmentsContext, { SetDepartmentsStateType } from "../utils/SetDepartmentsContext";
+import { DepartmentProps } from "../components/Department";
 
-import SetDepartmentsContext from "../utils/SetDepartmentsContext";
+type Props = {
+  open: boolean;
+  setOpen: (open: boolean) => void;
+  dept: DepartmentProps;
+}
 
-export default function DeptNameDialog({ open, setOpen, dept }) {
-  const setDepartments = useContext(SetDepartmentsContext);
-  const suffix = toSuffix(dept.level);
-  const [name, setName] = useState(dept.name);
+const DeptNameDialog: FC<Props> = ({ open, setOpen, dept }) => {
+  const suffix: string = toSuffix(dept.level);
+  const [name, setName] = useState<string>(dept.name);
+  const setDepartments = useContext<SetDepartmentsStateType>(SetDepartmentsContext);
+  if (setDepartments === null) return null;
 
   const handleClose = () => {
     setOpen(false);
   };
 
-  const updateDeptName = (depts) => {
+  const updateDeptName = (depts: DepartmentProps[]) => {
     depts.forEach((d) => {
       if (d.id === dept.id) {
         d.name = name;
@@ -80,3 +87,5 @@ export default function DeptNameDialog({ open, setOpen, dept }) {
     </div>
   );
 }
+
+export default DeptNameDialog;
