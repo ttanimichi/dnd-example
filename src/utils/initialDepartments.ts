@@ -1,9 +1,11 @@
 import updateLevel from "./updateLevel";
 import { createEmployees } from "./createEmployees";
+import { EmployeeProps } from "../components/Employee";
 
 const initialDepartments = [
   {
     name: "株式会社イグザンプル",
+    managers: [],
     branches: [
       {
         name: "管理",
@@ -67,7 +69,15 @@ const initialDepartments = [
   },
 ];
 
-function buildDepartments(depts) {
+type Dept = {
+  name: string;
+  branches: Dept[];
+  id?: string;
+  managers?: EmployeeProps[];
+  members?: EmployeeProps[];
+};
+
+function buildDepartments(depts: Dept[]) {
   depts.forEach((dept) => {
     dept.id = crypto.randomUUID();
     dept.managers = createEmployees(1);
