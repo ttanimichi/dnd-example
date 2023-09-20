@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { FC, useContext, useState } from "react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
@@ -9,17 +9,29 @@ import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import Stack from "@mui/material/Stack";
 import UndoIcon from "@mui/icons-material/Undo";
 import RedoIcon from "@mui/icons-material/Redo";
-import SetDepartmentsContext from "../utils/SetDepartmentsContext";
+import SetDepartmentsContext, {
+  SetDepartmentsStateType,
+} from "../utils/SetDepartmentsContext";
 import initialDepartments from "../utils/initialDepartments";
 import UploadIcon from "@mui/icons-material/Upload";
 import DownloadIcon from "@mui/icons-material/Download";
 import UnfoldLessIcon from "@mui/icons-material/UnfoldLess";
 import UnfoldMoreIcon from "@mui/icons-material/UnfoldMore";
 import ShoppingCartDialog from "./ShoppingCartDialog";
+import { DepartmentProps } from "./Department";
 
-export default function Header({ departments, undo, redo }) {
-  const setDepartments = useContext(SetDepartmentsContext);
+type Props = {
+  departments: DepartmentProps[];
+  undo: () => void;
+  redo: () => void;
+};
+
+const Header: FC<Props> = ({ departments, undo, redo }) => {
   const [shoppingCartDialogOpen, setShoppingCartDialogOpen] = useState(false);
+  const setDepartments = useContext<SetDepartmentsStateType>(
+    SetDepartmentsContext
+  );
+  if (setDepartments === null) return null;
 
   const handleExport = () => {
     const dataStr =
@@ -35,19 +47,21 @@ export default function Header({ departments, undo, redo }) {
     const input = document.createElement("input");
     input.type = "file";
     input.onchange = (e) => {
-      const file = e.target.files[0];
+      const target = e.target as HTMLInputElement;
+      if (!target) return;
+      const file = target.files![0];
       const reader = new FileReader();
       reader.readAsText(file, "UTF-8");
       reader.onload = (readerEvent) => {
-        const content = readerEvent.target.result;
-        setDepartments(() => JSON.parse(content));
+        const content = (readerEvent.target as FileReader).result;
+        setDepartments(() => JSON.parse(content as string));
       };
     };
     input.click();
   };
 
   // TODO: 再帰処理を関数間で共通化する
-  const changeCollapse = (departments, flag) => {
+  const changeCollapse = (departments: DepartmentProps[], flag: boolean) => {
     departments.forEach((d) => {
       d.collapse = flag;
       if (d.branches && d.branches.length > 0) {
@@ -158,4 +172,6 @@ export default function Header({ departments, undo, redo }) {
       />
     </Box>
   );
-}
+};
+
+export default Header;
