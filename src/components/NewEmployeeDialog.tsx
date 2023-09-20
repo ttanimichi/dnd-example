@@ -1,3 +1,5 @@
+import { FC, useState, useContext } from "react";
+
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import Dialog from "@mui/material/Dialog";
@@ -6,21 +8,23 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 
-import * as React from "react";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
-import Select from "@mui/material/Select";
+import Select, { SelectChangeEvent } from "@mui/material/Select";
 
 import Stack from "@mui/material/Stack";
 import Box from "@mui/material/Box";
 
-import SetDepartmentsContext from "../utils/SetDepartmentsContext";
+import SetDepartmentsContext, {
+  SetDepartmentsStateType,
+} from "../utils/SetDepartmentsContext";
 
 import { createEmployee } from "../utils/createEmployees";
+import { DepartmentProps } from "./Department";
 
 function TypeSelect({ type, setType }) {
-  const handleChange = (event) => {
+  const handleChange = (event: SelectChangeEvent) => {
     setType(event.target.value);
   };
 
@@ -43,7 +47,7 @@ function TypeSelect({ type, setType }) {
 }
 
 function GradeSelect({ grade, setGrade }) {
-  const handleChange = (event) => {
+  const handleChange = (event: SelectChangeEvent) => {
     setGrade(event.target.value);
   };
 
@@ -73,7 +77,7 @@ function GradeSelect({ grade, setGrade }) {
 }
 
 function PersonMonthSelect({ personMonth, setPersonMonth }) {
-  const handleChange = (event) => {
+  const handleChange = (event: SelectChangeEvent) => {
     setPersonMonth(event.target.value);
   };
 
@@ -103,19 +107,28 @@ function PersonMonthSelect({ personMonth, setPersonMonth }) {
   );
 }
 
-export default function EmployeeInfoDialog({ open, setOpen, dept }) {
-  const setDepartments = React.useContext(SetDepartmentsContext);
+type Props = {
+  open: boolean;
+  setOpen: (open: boolean) => void;
+  dept: DepartmentProps;
+};
 
-  const [name, setName] = React.useState("");
-  const [employmentType, setEmploymentType] = React.useState("mid_career");
-  const [grade, setGrade] = React.useState("グレードE");
-  const [personMonth, setPersonMonth] = React.useState("1.0");
+const EmployeeInfoDialog: FC<Props> = ({ open, setOpen, dept }) => {
+  const [name, setName] = useState("");
+  const [employmentType, setEmploymentType] = useState("mid_career");
+  const [grade, setGrade] = useState("グレードE");
+  const [personMonth, setPersonMonth] = useState("1.0");
+
+  const setDepartments = useContext<SetDepartmentsStateType>(
+    SetDepartmentsContext
+  );
+  if (setDepartments === null) return null;
 
   const handleClose = () => {
     setOpen(false);
   };
 
-  const addEmployee = (depts) => {
+  const addEmployee = (depts: DepartmentProps[]) => {
     depts.forEach((d) => {
       if (d.id === dept.id) {
         d.members.push(
@@ -181,4 +194,6 @@ export default function EmployeeInfoDialog({ open, setOpen, dept }) {
       </Dialog>
     </div>
   );
-}
+};
+
+export default EmployeeInfoDialog;
