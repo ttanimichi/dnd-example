@@ -1,4 +1,4 @@
-import { useState, useContext } from "react";
+import { FC, useState, useContext, ChangeEvent } from "react";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import Dialog from "@mui/material/Dialog";
@@ -9,16 +9,19 @@ import DialogTitle from "@mui/material/DialogTitle";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
-import Select from "@mui/material/Select";
+import Select, { SelectChangeEvent } from "@mui/material/Select";
 import Stack from "@mui/material/Stack";
 import Box from "@mui/material/Box";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
-
-import SetDepartmentsContext from "../utils/SetDepartmentsContext";
+import SetDepartmentsContext, {
+  SetDepartmentsStateType,
+} from "../utils/SetDepartmentsContext";
+import { EmployeeProps } from "./Employee";
+import { DepartmentProps } from "./Department";
 
 function GradeSelect({ grade, setGrade }) {
-  const handleChange = (event) => {
+  const handleChange = (event: SelectChangeEvent) => {
     setGrade(event.target.value);
   };
 
@@ -48,7 +51,7 @@ function GradeSelect({ grade, setGrade }) {
 }
 
 function PersonMonthSelect({ personMonth, setPersonMonth }) {
-  const handleChange = (event) => {
+  const handleChange = (event: SelectChangeEvent) => {
     setPersonMonth(event.target.value);
   };
 
@@ -78,22 +81,31 @@ function PersonMonthSelect({ personMonth, setPersonMonth }) {
   );
 }
 
-export default function EmployeeInfoDialog({ open, setOpen, employee }) {
-  const setDepartments = useContext(SetDepartmentsContext);
+type Props = {
+  open: boolean;
+  setOpen: (open: boolean) => void;
+  employee: EmployeeProps;
+};
 
+const EmployeeInfoDialog: FC<Props> = ({ open, setOpen, employee }) => {
   const [grade, setGrade] = useState(employee.grade);
   const [personMonth, setPersonMonth] = useState(employee.personMonth);
   const [name, setName] = useState(employee.name);
   const [isRetired, setIsRetired] = useState(!!employee.isRetired);
   const [isSuspended, setIsSuspended] = useState(!!employee.isSuspended);
 
-  const handleRetired = (event) => {
+  const setDepartments = useContext<SetDepartmentsStateType>(
+    SetDepartmentsContext
+  );
+  if (setDepartments === null) return null;
+
+  const handleRetired = (event: ChangeEvent<HTMLInputElement>) => {
     const checked = event.target.checked;
     setIsRetired(checked);
     if (checked) setIsSuspended(false);
   };
 
-  const handleSuspended = (event) => {
+  const handleSuspended = (event: ChangeEvent<HTMLInputElement>) => {
     const checked = event.target.checked;
     setIsSuspended(checked);
     if (checked) setIsRetired(false);
@@ -103,7 +115,7 @@ export default function EmployeeInfoDialog({ open, setOpen, employee }) {
     setOpen(false);
   };
 
-  const _updateEmployee = (member) => {
+  const _updateEmployee = (member: EmployeeProps) => {
     if (member.id === employee.id) {
       member.grade = grade;
       member.personMonth = personMonth;
@@ -113,7 +125,7 @@ export default function EmployeeInfoDialog({ open, setOpen, employee }) {
     }
   };
 
-  const updateEmployee = (depts) => {
+  const updateEmployee = (depts: DepartmentProps[]) => {
     depts.forEach((dept) => {
       dept.members.forEach(_updateEmployee);
       dept.managers.forEach(_updateEmployee);
@@ -194,4 +206,6 @@ export default function EmployeeInfoDialog({ open, setOpen, employee }) {
       </Dialog>
     </div>
   );
-}
+};
+
+export default EmployeeInfoDialog;
