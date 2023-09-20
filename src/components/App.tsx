@@ -10,7 +10,7 @@ import useDepartments from "../utils/useDepartments";
 
 export default function App() {
   const [departments, setDepartments, undo, redo] = useDepartments();
-  const [target, setTarget] = useState(null);
+  const [target, setTarget] = useState<string | null>(null);
 
   return (
     <TargetContext.Provider value={target}>
