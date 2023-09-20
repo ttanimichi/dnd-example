@@ -13,6 +13,7 @@ export type EmployeeProps = {
   secondaryRole?: boolean;
   isRetired?: boolean;
   isSuspended?: boolean;
+  employmentType?: string;
 };
 
 const Employee: FC<EmployeeProps> = ({
@@ -60,12 +61,23 @@ const Employee: FC<EmployeeProps> = ({
             </Stack>
           </Stack>
           <span style={{ width: 10 }} />
-          <EmployeeMenu employee={{ id, name, grade, personMonth, avatar, secondaryRole, isRetired, isSuspended }} />
+          <EmployeeMenu
+            employee={{
+              id,
+              name,
+              grade,
+              personMonth,
+              avatar,
+              secondaryRole,
+              isRetired,
+              isSuspended,
+            }}
+          />
           <span style={{ width: 10 }} />
         </div>
       </Draggable>
     </div>
   );
-}
+};
 
 export default Employee;

@@ -1,4 +1,5 @@
 import { faker } from "@faker-js/faker/locale/ja";
+import { EmployeeProps } from "../components/Employee";
 
 export function createEmployee({
   id = crypto.randomUUID(),
@@ -6,8 +7,8 @@ export function createEmployee({
   grade = "グレードE",
   personMonth = "1.0",
   avatar = "/avatar.png",
-  employmentType = null,
-}) {
+  employmentType = undefined
+}): EmployeeProps {
   return {
     id,
     name,
@@ -18,7 +19,7 @@ export function createEmployee({
   };
 }
 
-export function createEmployees(num) {
+export function createEmployees(num: number): EmployeeProps[] {
   return [...Array(num)].map(() =>
     createEmployee({
       name: faker.person.fullName(),
