@@ -168,7 +168,7 @@ const Header: FC<Props> = ({ departments, undo, redo }) => {
       <ShoppingCartDialog
         open={shoppingCartDialogOpen}
         setOpen={setShoppingCartDialogOpen}
-        dept={departments}
+        departments={departments}
       />
     </Box>
   );

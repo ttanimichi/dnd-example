@@ -1,5 +1,4 @@
-import { useContext, useState } from "react";
-
+import { FC } from "react";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
@@ -7,11 +6,21 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import Box from "@mui/material/Box";
-import initialDepartments from "../utils/initialDepartments";
+import { DepartmentProps } from "./Department";
+// import initialDepartments from "../utils/initialDepartments";
 
-export default function ShoppingCartDialog({ open, setOpen, departments }) {
+type Props = {
+  open: boolean;
+  setOpen: (open: boolean) => void;
+  departments: DepartmentProps[];
+};
+
+const ShoppingCartDialog: FC<Props> = ({ open, setOpen, departments }) => {
   // const departmentNames = buildDepartmentNames(departments);
   // const initialDepartmentNames = buildDepartmentNames(initialDepartments);
+
+  // NOTE: コンパイルエラーにならないよう一時的に参照させている仮実装
+  departments;
 
   const handleClose = () => {
     setOpen(false);
@@ -104,4 +113,6 @@ export default function ShoppingCartDialog({ open, setOpen, departments }) {
       </Dialog>
     </div>
   );
-}
+};
+
+export default ShoppingCartDialog;
