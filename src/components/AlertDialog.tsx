@@ -1,3 +1,4 @@
+import { FC } from "react";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
@@ -5,12 +6,19 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 
-export default function AlertDialog({
+type Props = {
+  open: boolean;
+  setOpen: (open: boolean) => void;
+  title: string;
+  message: string;
+};
+
+const AlertDialog: FC<Props> = ({
   open,
   setOpen,
   title = "エラー",
   message,
-}) {
+}) => {
   const handleClose = () => {
     setOpen(false);
   };
@@ -28,4 +36,6 @@ export default function AlertDialog({
       </Dialog>
     </div>
   );
-}
+};
+
+export default AlertDialog;
