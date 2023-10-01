@@ -24,7 +24,7 @@ function renderDepartment({
   members,
   branches,
   collapse,
-}) {
+}: DepartmentProps) {
   return (
     <div key={id} style={{ display: "flex", alignItems: "flex-start" }}>
       <Department
@@ -47,10 +47,11 @@ function isDescendant(
   childId: string
 ) {
   const subTree = removeById(structuredClone(depts), parentId);
+  if (subTree === undefined) return false;
   return isDescendantSubTree(subTree, childId);
 }
 
-function isDescendantSubTree(subTree, childId) {
+function isDescendantSubTree(subTree: DepartmentProps, childId: string) {
   if (subTree.id === childId) {
     return true;
   }
@@ -66,7 +67,10 @@ function isDescendantSubTree(subTree, childId) {
   return false;
 }
 
-function removeById(depts: DepartmentProps[], idToRemove: string) {
+function removeById(
+  depts: DepartmentProps[],
+  idToRemove: string
+): DepartmentProps | undefined {
   for (let i = 0; i < depts.length; i++) {
     if (depts[i].id === idToRemove) {
       const removed = depts.splice(i, 1);
@@ -99,7 +103,10 @@ function addToChildrenById(
   }
 }
 
-function removeMember(depts: DepartmentProps[], memberId: string) {
+function removeMember(
+  depts: DepartmentProps[],
+  memberId: string
+): EmployeeProps | undefined {
   for (let i = 0; i < depts.length; i++) {
     const dept = depts[i];
     const removedManagers = dept.managers.filter((n) => n.id === memberId);
@@ -122,7 +129,7 @@ function addMember(
   depts: DepartmentProps[],
   overId: string,
   employee: EmployeeProps
-) {
+): void {
   const [type, deptId] = overId.split("/");
 
   depts.forEach((dept) => {
@@ -138,7 +145,11 @@ function addMember(
   });
 }
 
-export default function OrganizationChart({ departments }) {
+export default function OrganizationChart({
+  departments,
+}: {
+  departments: DepartmentProps[];
+}) {
   const sensors = useSensors(
     useSensor(MouseSensor, { activationConstraint: { distance: 3 } })
   );
@@ -164,7 +175,7 @@ export default function OrganizationChart({ departments }) {
     const { active } = event;
     if (!active || setTarget === null) return;
 
-    setTarget(active.data.current?.type);
+    setTarget(active.data.current?.type as string | null);
   }
 
   function handleDragEnd(event: DragEndEvent) {
@@ -179,11 +190,13 @@ export default function OrganizationChart({ departments }) {
       const newDepartments = structuredClone(prevDepartments);
       if (target === "employee") {
         const removed = removeMember(newDepartments, activeId);
+        if (removed === undefined) return newDepartments;
         addMember(newDepartments, over.id.toString(), removed);
       } else if (target === "dept") {
         // 循環参照を防止
         if (!isDescendant(newDepartments, activeId, overId)) {
           const removed = removeById(newDepartments, activeId);
+          if (removed === undefined) return newDepartments;
           addToChildrenById(newDepartments, overId, removed);
           updateLevel(newDepartments);
         }

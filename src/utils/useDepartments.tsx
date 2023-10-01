@@ -56,5 +56,5 @@ export default function useDepartments(): Props {
 function getDepartments(): DepartmentProps[] {
   const departments = localStorage.getItem("departments");
   if (departments === null) return initialDepartments;
-  return JSON.parse(departments);
+  return JSON.parse(departments) as DepartmentProps[];
 }

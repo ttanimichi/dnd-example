@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import updateLevel from "./updateLevel";
@@ -81,7 +82,7 @@ function buildDepartments(depts: any[]) {
     dept.level = -1;
 
     if (dept.branches && dept.branches.length > 0) {
-      buildDepartments(dept.branches);
+      buildDepartments(dept.branches as any[]);
     }
   });
 }
@@ -94,4 +95,4 @@ depts[0].managers = [];
 const initialDepartments = depts as DepartmentProps[];
 updateLevel(initialDepartments);
 
-export default initialDepartments as DepartmentProps[];
+export default initialDepartments;

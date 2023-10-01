@@ -20,7 +20,7 @@ export function createEmployee({
 }
 
 export function createEmployees(num: number): EmployeeProps[] {
-  return [...Array(num)].map(() =>
+  return Array.from({ length: num }).map(() =>
     createEmployee({
       name: faker.person.fullName(),
       avatar: faker.image.avatar(),

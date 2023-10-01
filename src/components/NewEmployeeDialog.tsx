@@ -21,7 +21,13 @@ import SetDepartmentsContext from "../utils/SetDepartmentsContext";
 import { createEmployee } from "../utils/createEmployees";
 import { DepartmentProps } from "./Department";
 
-function TypeSelect({ type, setType }) {
+function TypeSelect({
+  type,
+  setType,
+}: {
+  type: string;
+  setType: (value: string) => void;
+}) {
   const handleChange = (event: SelectChangeEvent) => {
     setType(event.target.value);
   };
@@ -44,7 +50,13 @@ function TypeSelect({ type, setType }) {
   );
 }
 
-function GradeSelect({ grade, setGrade }) {
+function GradeSelect({
+  grade,
+  setGrade,
+}: {
+  grade: string;
+  setGrade: (value: string) => void;
+}) {
   const handleChange = (event: SelectChangeEvent) => {
     setGrade(event.target.value);
   };
@@ -74,7 +86,13 @@ function GradeSelect({ grade, setGrade }) {
   );
 }
 
-function PersonMonthSelect({ personMonth, setPersonMonth }) {
+function PersonMonthSelect({
+  personMonth,
+  setPersonMonth,
+}: {
+  personMonth: string;
+  setPersonMonth: (value: string) => void;
+}) {
   const handleChange = (event: SelectChangeEvent) => {
     setPersonMonth(event.target.value);
   };

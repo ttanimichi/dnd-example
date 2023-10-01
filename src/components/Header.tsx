@@ -50,7 +50,8 @@ const Header: FC<Props> = ({ departments, undo, redo }) => {
       reader.readAsText(file, "UTF-8");
       reader.onload = (readerEvent) => {
         const content = (readerEvent.target as FileReader).result;
-        setDepartments(() => JSON.parse(content as string));
+        const depts = JSON.parse(content as string) as DepartmentProps[];
+        setDepartments(() => depts);
       };
     };
     input.click();
