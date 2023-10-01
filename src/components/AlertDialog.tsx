@@ -9,7 +9,7 @@ import DialogTitle from "@mui/material/DialogTitle";
 type Props = {
   open: boolean;
   setOpen: (open: boolean) => void;
-  title: string;
+  title?: string;
   message: string;
 };
 
