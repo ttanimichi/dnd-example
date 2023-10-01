@@ -17,8 +17,14 @@ export type DepartmentProps = {
   branches: DepartmentProps[];
 };
 
-const Department: FC<DepartmentProps> = ({ 
-  id, name, managers, members, level, collapse, branches
+const Department: FC<DepartmentProps> = ({
+  id,
+  name,
+  managers,
+  members,
+  level,
+  collapse,
+  branches,
 }) => {
   const target = useContext(TargetContext);
   const suffix = toSuffix(level);
@@ -33,7 +39,9 @@ const Department: FC<DepartmentProps> = ({
       }}
     >
       <div>{`${name}${suffix}`}</div>
-      <DeptMenu dept={{id, name, managers, members, level, collapse, branches}} />
+      <DeptMenu
+        dept={{ id, name, managers, members, level, collapse, branches }}
+      />
     </div>
   );
 
@@ -100,6 +108,6 @@ const Department: FC<DepartmentProps> = ({
       </Draggable>
     </Droppable>
   );
-}
+};
 
 export default Department;

@@ -1,8 +1,11 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import updateLevel from "./updateLevel";
 import { createEmployees } from "./createEmployees";
-import { EmployeeProps } from "../components/Employee";
+import { DepartmentProps } from "../components/Department";
 
-const initialDepartments = [
+// NOTE: ネストしたオブジェクトを動的に組み立てるために意図的に any を使用している
+const depts: any[] = [
   {
     name: "株式会社イグザンプル",
     managers: [],
@@ -69,19 +72,13 @@ const initialDepartments = [
   },
 ];
 
-type Dept = {
-  name: string;
-  branches: Dept[];
-  id?: string;
-  managers?: EmployeeProps[];
-  members?: EmployeeProps[];
-};
-
-function buildDepartments(depts: Dept[]) {
+function buildDepartments(depts: any[]) {
   depts.forEach((dept) => {
     dept.id = crypto.randomUUID();
     dept.managers = createEmployees(1);
     dept.members = createEmployees(2);
+    dept.collapse = false;
+    dept.level = -1;
 
     if (dept.branches && dept.branches.length > 0) {
       buildDepartments(dept.branches);
@@ -89,11 +86,12 @@ function buildDepartments(depts: Dept[]) {
   });
 }
 
-buildDepartments(initialDepartments);
+buildDepartments(depts);
 
 // The top level department doesn't have managers
-initialDepartments[0].managers = [];
+depts[0].managers = [];
 
+const initialDepartments = depts as DepartmentProps[];
 updateLevel(initialDepartments);
 
-export default initialDepartments;
+export default initialDepartments as DepartmentProps[];
