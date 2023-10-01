@@ -16,9 +16,7 @@ import Select, { SelectChangeEvent } from "@mui/material/Select";
 import Stack from "@mui/material/Stack";
 import Box from "@mui/material/Box";
 
-import SetDepartmentsContext, {
-  SetDepartmentsStateType,
-} from "../utils/SetDepartmentsContext";
+import SetDepartmentsContext from "../utils/SetDepartmentsContext";
 
 import { createEmployee } from "../utils/createEmployees";
 import { DepartmentProps } from "./Department";
@@ -119,9 +117,7 @@ const EmployeeInfoDialog: FC<Props> = ({ open, setOpen, dept }) => {
   const [grade, setGrade] = useState("グレードE");
   const [personMonth, setPersonMonth] = useState("1.0");
 
-  const setDepartments = useContext<SetDepartmentsStateType>(
-    SetDepartmentsContext
-  );
+  const setDepartments = useContext(SetDepartmentsContext);
   if (setDepartments === null) return null;
 
   const handleClose = () => {

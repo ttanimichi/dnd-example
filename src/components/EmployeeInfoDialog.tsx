@@ -14,9 +14,7 @@ import Stack from "@mui/material/Stack";
 import Box from "@mui/material/Box";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
-import SetDepartmentsContext, {
-  SetDepartmentsStateType,
-} from "../utils/SetDepartmentsContext";
+import SetDepartmentsContext from "../utils/SetDepartmentsContext";
 import { EmployeeProps } from "./Employee";
 import { DepartmentProps } from "./Department";
 
@@ -94,9 +92,7 @@ const EmployeeInfoDialog: FC<Props> = ({ open, setOpen, employee }) => {
   const [isRetired, setIsRetired] = useState(!!employee.isRetired);
   const [isSuspended, setIsSuspended] = useState(!!employee.isSuspended);
 
-  const setDepartments = useContext<SetDepartmentsStateType>(
-    SetDepartmentsContext
-  );
+  const setDepartments = useContext(SetDepartmentsContext);
   if (setDepartments === null) return null;
 
   const handleRetired = (event: ChangeEvent<HTMLInputElement>) => {

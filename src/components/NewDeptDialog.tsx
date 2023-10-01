@@ -9,7 +9,7 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import Box from "@mui/material/Box";
 
-import SetDepartmentsContext, { SetDepartmentsStateType } from "../utils/SetDepartmentsContext";
+import SetDepartmentsContext from "../utils/SetDepartmentsContext";
 import toSuffix from "../utils/toSuffix";
 import { DepartmentProps } from "../components/Department";
 
@@ -17,12 +17,12 @@ type Props = {
   open: boolean;
   setOpen: (open: boolean) => void;
   dept: DepartmentProps;
-}
+};
 
 const NewDeptDialog: FC<Props> = ({ open, setOpen, dept }) => {
   const [name, setName] = useState<string>("");
 
-  const setDepartments = useContext<SetDepartmentsStateType>(SetDepartmentsContext);
+  const setDepartments = useContext(SetDepartmentsContext);
   if (setDepartments === null) return null;
 
   const suffix: string = toSuffix(dept.level + 1);

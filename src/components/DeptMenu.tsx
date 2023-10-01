@@ -6,11 +6,11 @@ import DeptNameDialog from "./DeptNameDialog";
 import NewDeptDialog from "./NewDeptDialog";
 import NewEmployeeDialog from "./NewEmployeeDialog";
 import AlertDialog from "./AlertDialog";
-import SetDepartmentsContext, { SetDepartmentsStateType } from "../utils/SetDepartmentsContext";
+import SetDepartmentsContext from "../utils/SetDepartmentsContext";
 import { DepartmentProps } from "./Department";
 
 type Props = {
-  dept: DepartmentProps,
+  dept: DepartmentProps;
 };
 
 export default function DeptMenu({ dept }: Props) {
@@ -20,7 +20,7 @@ export default function DeptMenu({ dept }: Props) {
   const [newEmployeeDialogOpen, setNewEmployeeDialogOpen] = useState(false);
   const [deleteDeptDialogOpen, setDeleteDeptDialogOpen] = useState(false);
 
-  const setDepartments = useContext<SetDepartmentsStateType>(SetDepartmentsContext);
+  const setDepartments = useContext(SetDepartmentsContext);
   if (setDepartments === null) return null;
 
   const open = Boolean(anchorEl);

@@ -3,19 +3,19 @@ import Button from "@mui/material/Button";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import EmployeeInfoDialog from "./EmployeeInfoDialog";
-import SetDepartmentsContext, { SetDepartmentsStateType } from "../utils/SetDepartmentsContext";
+import SetDepartmentsContext from "../utils/SetDepartmentsContext";
 import { EmployeeProps } from "./Employee";
 import { DepartmentProps } from "./Department";
 
 type Props = {
   employee: EmployeeProps;
-}
+};
 
 export default function EmployeeMenu({ employee }: Props) {
   const [dialogOpen, setDialogOpen] = useState<boolean>(false);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
-  const setDepartments = useContext<SetDepartmentsStateType>(SetDepartmentsContext);
+  const setDepartments = useContext(SetDepartmentsContext);
   if (setDepartments === null) return null;
 
   const open = Boolean(anchorEl);

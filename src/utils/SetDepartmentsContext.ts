@@ -1,7 +1,6 @@
-import { createContext, Dispatch, SetStateAction } from "react";
-import { DepartmentProps } from "../components/Department";
+import { createContext } from "react";
+import { SetDepartmentsType } from "./useDepartments";
 
-export type SetDepartmentsStateType = Dispatch<SetStateAction<DepartmentProps[]>> | null;
-const SetDepartmentsContext = createContext<SetDepartmentsStateType>(null);
+const SetDepartmentsContext = createContext<SetDepartmentsType | null>(null);
 
 export default SetDepartmentsContext;

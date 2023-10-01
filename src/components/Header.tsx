@@ -9,9 +9,7 @@ import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import Stack from "@mui/material/Stack";
 import UndoIcon from "@mui/icons-material/Undo";
 import RedoIcon from "@mui/icons-material/Redo";
-import SetDepartmentsContext, {
-  SetDepartmentsStateType,
-} from "../utils/SetDepartmentsContext";
+import SetDepartmentsContext from "../utils/SetDepartmentsContext";
 import initialDepartments from "../utils/initialDepartments";
 import UploadIcon from "@mui/icons-material/Upload";
 import DownloadIcon from "@mui/icons-material/Download";
@@ -28,9 +26,7 @@ type Props = {
 
 const Header: FC<Props> = ({ departments, undo, redo }) => {
   const [shoppingCartDialogOpen, setShoppingCartDialogOpen] = useState(false);
-  const setDepartments = useContext<SetDepartmentsStateType>(
-    SetDepartmentsContext
-  );
+  const setDepartments = useContext(SetDepartmentsContext);
   if (setDepartments === null) return null;
 
   const handleExport = () => {

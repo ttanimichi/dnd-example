@@ -7,9 +7,7 @@ import {
   DragEndEvent,
 } from "@dnd-kit/core";
 import Department, { DepartmentProps } from "./Department";
-import SetDepartmentsContext, {
-  SetDepartmentsStateType,
-} from "../utils/SetDepartmentsContext";
+import SetDepartmentsContext from "../utils/SetDepartmentsContext";
 import TargetContext from "../utils/TargetContext";
 import SetTargetContext, {
   SetTargetStateType,
@@ -147,9 +145,7 @@ export default function OrganizationChart({ departments }) {
 
   const target = useContext<string | null>(TargetContext);
   const setTarget = useContext<SetTargetStateType>(SetTargetContext);
-  const setDepartments = useContext<SetDepartmentsStateType>(
-    SetDepartmentsContext
-  );
+  const setDepartments = useContext(SetDepartmentsContext);
 
   return (
     <DndContext
