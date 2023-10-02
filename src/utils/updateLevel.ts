@@ -6,7 +6,7 @@ export default function updateLevel(
 ): DepartmentProps[] {
   return depts.map((dept: DepartmentProps) => {
     dept.level = level;
-    if (dept.branches && dept.branches.length > 0) {
+    if (dept.branches.length > 0) {
       dept.branches = updateLevel(dept.branches, level + 1);
     }
     return dept;

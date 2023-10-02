@@ -44,12 +44,14 @@ const Header: FC<Props> = ({ departments, undo, redo }) => {
     input.type = "file";
     input.onchange = (e) => {
       const target = e.target as HTMLInputElement;
-      if (!target) return;
-      const file = target.files![0];
+      const files = target.files;
+      if (files === null) return;
       const reader = new FileReader();
-      reader.readAsText(file, "UTF-8");
+      reader.readAsText(files[0], "UTF-8");
       reader.onload = (readerEvent) => {
-        const content = (readerEvent.target!).result;
+        const target = readerEvent.target;
+        if (target === null) return;
+        const content = target.result;
         const depts = JSON.parse(content as string) as DepartmentProps[];
         setDepartments(() => depts);
       };
@@ -61,7 +63,7 @@ const Header: FC<Props> = ({ departments, undo, redo }) => {
   const changeCollapse = (departments: DepartmentProps[], flag: boolean) => {
     departments.forEach((d) => {
       d.collapse = flag;
-      if (d.branches && d.branches.length > 0) {
+      if (d.branches.length > 0) {
         changeCollapse(d.branches, flag);
       }
     });

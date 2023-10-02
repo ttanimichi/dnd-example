@@ -137,7 +137,7 @@ const EmployeeInfoDialog: FC<Props> = ({ open, setOpen, employee }) => {
     depts.forEach((dept) => {
       dept.members.forEach(_updateEmployee);
       dept.managers.forEach(_updateEmployee);
-      if (dept.branches && dept.branches.length > 0) {
+      if (dept.branches.length > 0) {
         updateEmployee(dept.branches);
       }
     });

@@ -57,7 +57,7 @@ export default function EmployeeMenu({ employee }: Props) {
         d.members.push(buildSecondaryRole());
       } else if (manager) {
         d.managers.push(buildSecondaryRole());
-      } else if (d.branches && d.branches.length > 0) {
+      } else if (d.branches.length > 0) {
         addRole(d.branches);
       }
     });
@@ -81,7 +81,7 @@ export default function EmployeeMenu({ employee }: Props) {
         d.members.splice(d.members.indexOf(member), 1);
       } else if (manager) {
         d.managers.splice(d.managers.indexOf(manager), 1);
-      } else if (d.branches && d.branches.length > 0) {
+      } else if (d.branches.length > 0) {
         deleteEmployee(d.branches);
       }
     });

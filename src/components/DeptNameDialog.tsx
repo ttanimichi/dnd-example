@@ -33,7 +33,7 @@ const DeptNameDialog: FC<Props> = ({ open, setOpen, dept }) => {
       if (d.id === dept.id) {
         d.name = name;
       }
-      if (d.branches && d.branches.length > 0) {
+      if (d.branches.length > 0) {
         updateDeptName(d.branches);
       }
     });

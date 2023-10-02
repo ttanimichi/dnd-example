@@ -44,7 +44,7 @@ const NewDeptDialog: FC<Props> = ({ open, setOpen, dept }) => {
           collapse: false,
         });
       }
-      if (d.branches && d.branches.length > 0) {
+      if (d.branches.length > 0) {
         addDept(d.branches);
       }
     });

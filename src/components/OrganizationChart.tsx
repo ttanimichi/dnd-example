@@ -56,7 +56,7 @@ function isDescendantSubTree(subTree: DepartmentProps, childId: string) {
     return true;
   }
 
-  if (subTree.branches && subTree.branches.length > 0) {
+  if (subTree.branches.length > 0) {
     for (const branch of subTree.branches) {
       if (isDescendantSubTree(branch, childId)) {
         return true;
@@ -71,17 +71,15 @@ function removeById(
   depts: DepartmentProps[],
   idToRemove: string
 ): DepartmentProps | undefined {
-  for (let i = 0; i < depts.length; i++) {
-    if (depts[i].id === idToRemove) {
-      const removed = depts.splice(i, 1);
+  for (const [index, dept] of depts.entries()) {
+    if (dept.id === idToRemove) {
+      const removed = depts.splice(index, 1);
       return removed[0];
     }
 
-    if (depts[i].branches && depts[i].branches.length > 0) {
-      const removed = removeById(depts[i].branches, idToRemove);
-      if (removed) {
-        return removed;
-      }
+    if (dept.branches.length > 0) {
+      const removed = removeById(dept.branches, idToRemove);
+      if (removed) return removed;
     }
   }
 }
@@ -97,7 +95,7 @@ function addToChildrenById(
       return;
     }
 
-    if (dept.branches && dept.branches.length > 0) {
+    if (dept.branches.length > 0) {
       addToChildrenById(dept.branches, id, value);
     }
   }
@@ -172,7 +170,7 @@ export default function OrganizationChart({
 
   function handleDragStart(event: DragStartEvent) {
     const { active } = event;
-    if (!active || setTarget === null) return;
+    if (setTarget === null) return;
 
     setTarget(active.data.current?.type as string | null);
   }
@@ -181,7 +179,7 @@ export default function OrganizationChart({
     if (setDepartments === null) return null;
 
     const { over, active } = event;
-    if (!over || !active) return;
+    if (!over) return;
     const activeId = active.id.toString().split("/")[1];
     const overId = over.id.toString().split("/")[1];
 

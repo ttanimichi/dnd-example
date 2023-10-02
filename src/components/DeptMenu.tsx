@@ -64,7 +64,7 @@ export default function DeptMenu({ dept }: Props) {
     depts.forEach((d) => {
       if (d.id === dept.id) {
         depts.splice(depts.indexOf(d), 1);
-      } else if (d.branches && d.branches.length > 0) {
+      } else if (d.branches.length > 0) {
         deleteDept(d.branches);
       }
     });
@@ -81,7 +81,7 @@ export default function DeptMenu({ dept }: Props) {
     depts.forEach((d) => {
       if (d.id === dept.id) {
         d.collapse = !d.collapse;
-      } else if (d.branches && d.branches.length > 0) {
+      } else if (d.branches.length > 0) {
         collapseOrExpand(d.branches);
       }
     });

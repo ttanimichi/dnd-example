@@ -154,7 +154,7 @@ const EmployeeInfoDialog: FC<Props> = ({ open, setOpen, dept }) => {
           })
         );
       }
-      if (d.branches && d.branches.length > 0) {
+      if (d.branches.length > 0) {
         addEmployee(d.branches);
       }
     });
