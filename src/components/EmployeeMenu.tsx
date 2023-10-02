@@ -1,18 +1,26 @@
-import { useContext, useState } from "react";
+import { useContext, useState, MouseEvent } from "react";
 import Button from "@mui/material/Button";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
-import EmployeeInfoDialog from "./EmployeeInfoDialog.jsx";
+import EmployeeInfoDialog from "./EmployeeInfoDialog";
 import SetDepartmentsContext from "../utils/SetDepartmentsContext";
+import { EmployeeProps } from "./Employee";
+import { DepartmentProps } from "./Department";
 
-export default function EmployeeMenu({ employee }) {
+interface Props {
+  employee: EmployeeProps;
+}
+
+export default function EmployeeMenu({ employee }: Props) {
+  const [dialogOpen, setDialogOpen] = useState<boolean>(false);
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+
   const setDepartments = useContext(SetDepartmentsContext);
+  if (setDepartments === null) return null;
 
-  const [dialogOpen, setDialogOpen] = useState(false);
-  const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
 
-  const handleClick = (event) => {
+  const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
 
@@ -21,24 +29,26 @@ export default function EmployeeMenu({ employee }) {
   };
 
   const handleMultipleRoles = () => {
-    setDepartments((prev) => {
+    setDepartments((prev: DepartmentProps[]) => {
       const newDepts = structuredClone(prev);
       addRole(newDepts);
       return newDepts;
     });
     handleClose();
   };
-  const buildSecondaryRole = () => {
+
+  const buildSecondaryRole = (): EmployeeProps => {
     return {
       secondaryRole: true,
       id: crypto.randomUUID(),
       avatar: employee.avatar,
       name: employee.name,
       grade: employee.grade,
+      personMonth: "0.0",
     };
   };
 
-  const addRole = (depts) => {
+  const addRole = (depts: DepartmentProps[]) => {
     depts.forEach((d) => {
       const member = d.members.find((m) => m.id === employee.id);
       const manager = d.managers.find((m) => m.id === employee.id);
@@ -47,14 +57,14 @@ export default function EmployeeMenu({ employee }) {
         d.members.push(buildSecondaryRole());
       } else if (manager) {
         d.managers.push(buildSecondaryRole());
-      } else if (d.branches && d.branches.length > 0) {
+      } else if (d.branches.length > 0) {
         addRole(d.branches);
       }
     });
   };
 
   const handleDelete = () => {
-    setDepartments((prev) => {
+    setDepartments((prev: DepartmentProps[]) => {
       const newDepts = structuredClone(prev);
       deleteEmployee(newDepts);
       return newDepts;
@@ -62,7 +72,7 @@ export default function EmployeeMenu({ employee }) {
     handleClose();
   };
 
-  const deleteEmployee = (depts) => {
+  const deleteEmployee = (depts: DepartmentProps[]) => {
     depts.forEach((d) => {
       const member = d.members.find((m) => m.id === employee.id);
       const manager = d.managers.find((m) => m.id === employee.id);
@@ -71,7 +81,7 @@ export default function EmployeeMenu({ employee }) {
         d.members.splice(d.members.indexOf(member), 1);
       } else if (manager) {
         d.managers.splice(d.managers.indexOf(manager), 1);
-      } else if (d.branches && d.branches.length > 0) {
+      } else if (d.branches.length > 0) {
         deleteEmployee(d.branches);
       }
     });

@@ -1,17 +1,35 @@
-import { useContext } from "react";
+import { FC, useContext } from "react";
 import { Droppable } from "./Droppable";
 import { Draggable } from "./Draggable";
 import TargetContext from "../utils/TargetContext";
 import DeptMenu from "./DeptMenu";
 import toSuffix from "../utils/toSuffix";
 import EmployeeList from "./employeeList";
+import { EmployeeProps } from "./Employee";
 
-export default function Department(dept) {
-  const { id, deptName, managers, members, level, collapse } = dept;
+export interface DepartmentProps {
+  id: string | number;
+  name: string;
+  level: number;
+  collapse: boolean;
+  members: EmployeeProps[];
+  managers: EmployeeProps[];
+  branches: DepartmentProps[];
+}
+
+const Department: FC<DepartmentProps> = ({
+  id,
+  name,
+  managers,
+  members,
+  level,
+  collapse,
+  branches,
+}) => {
   const target = useContext(TargetContext);
-  let suffix = toSuffix(level);
+  const suffix = toSuffix(level);
 
-  const DeptHeader = () => (
+  const DeptHeader: FC = () => (
     <div
       style={{
         padding: 10,
@@ -20,12 +38,14 @@ export default function Department(dept) {
         justifyContent: "space-between",
       }}
     >
-      <div>{`${deptName}${suffix}`}</div>
-      <DeptMenu dept={dept} />
+      <div>{`${name}${suffix}`}</div>
+      <DeptMenu
+        dept={{ id, name, managers, members, level, collapse, branches }}
+      />
     </div>
   );
 
-  const DeptBody = () => (
+  const DeptBody: FC = () => (
     <div style={{ borderTop: "1px solid grey" }}>
       {level === 0 ? (
         <>
@@ -80,7 +100,7 @@ export default function Department(dept) {
             border: "1px solid grey",
             width: "360px",
           }}
-          key={deptName}
+          key={name}
         >
           <DeptHeader />
           {collapse ? null : <DeptBody />}
@@ -88,4 +108,6 @@ export default function Department(dept) {
       </Draggable>
     </Droppable>
   );
-}
+};
+
+export default Department;

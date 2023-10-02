@@ -1,4 +1,4 @@
-export default function toSuffix(level) {
+export default function toSuffix(level: number): string {
   let suffix = "";
 
   switch (level) {

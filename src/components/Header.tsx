@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { FC, useContext, useState } from "react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
@@ -16,10 +16,18 @@ import DownloadIcon from "@mui/icons-material/Download";
 import UnfoldLessIcon from "@mui/icons-material/UnfoldLess";
 import UnfoldMoreIcon from "@mui/icons-material/UnfoldMore";
 import ShoppingCartDialog from "./ShoppingCartDialog";
+import { DepartmentProps } from "./Department";
 
-export default function Header({ departments, undo, redo }) {
-  const setDepartments = useContext(SetDepartmentsContext);
+interface Props {
+  departments: DepartmentProps[];
+  undo: () => void;
+  redo: () => void;
+}
+
+const Header: FC<Props> = ({ departments, undo, redo }) => {
   const [shoppingCartDialogOpen, setShoppingCartDialogOpen] = useState(false);
+  const setDepartments = useContext(SetDepartmentsContext);
+  if (setDepartments === null) return null;
 
   const handleExport = () => {
     const dataStr =
@@ -35,22 +43,27 @@ export default function Header({ departments, undo, redo }) {
     const input = document.createElement("input");
     input.type = "file";
     input.onchange = (e) => {
-      const file = e.target.files[0];
+      const target = e.target as HTMLInputElement;
+      const files = target.files;
+      if (files === null) return;
       const reader = new FileReader();
-      reader.readAsText(file, "UTF-8");
+      reader.readAsText(files[0], "UTF-8");
       reader.onload = (readerEvent) => {
-        const content = readerEvent.target.result;
-        setDepartments(() => JSON.parse(content));
+        const target = readerEvent.target;
+        if (target === null) return;
+        const content = target.result;
+        const depts = JSON.parse(content as string) as DepartmentProps[];
+        setDepartments(() => depts);
       };
     };
     input.click();
   };
 
   // TODO: 再帰処理を関数間で共通化する
-  const changeCollapse = (departments, flag) => {
+  const changeCollapse = (departments: DepartmentProps[], flag: boolean) => {
     departments.forEach((d) => {
       d.collapse = flag;
-      if (d.branches && d.branches.length > 0) {
+      if (d.branches.length > 0) {
         changeCollapse(d.branches, flag);
       }
     });
@@ -154,8 +167,10 @@ export default function Header({ departments, undo, redo }) {
       <ShoppingCartDialog
         open={shoppingCartDialogOpen}
         setOpen={setShoppingCartDialogOpen}
-        dept={departments}
+        departments={departments}
       />
     </Box>
   );
-}
+};
+
+export default Header;

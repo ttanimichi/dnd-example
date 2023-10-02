@@ -1,4 +1,4 @@
-import { useState, useContext } from "react";
+import { useState, useContext, MouseEvent } from "react";
 import Button from "@mui/material/Button";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
@@ -7,18 +7,25 @@ import NewDeptDialog from "./NewDeptDialog";
 import NewEmployeeDialog from "./NewEmployeeDialog";
 import AlertDialog from "./AlertDialog";
 import SetDepartmentsContext from "../utils/SetDepartmentsContext";
+import { DepartmentProps } from "./Department";
 
-export default function DeptMenu({ dept }) {
-  const setDepartments = useContext(SetDepartmentsContext);
+interface Props {
+  dept: DepartmentProps;
+}
 
-  const [anchorEl, setAnchorEl] = useState(null);
+export default function DeptMenu({ dept }: Props) {
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [deptNameDialogOpen, setDeptNameDialogOpen] = useState(false);
   const [newDeptDialogOpen, setNewDeptDialogOpen] = useState(false);
   const [newEmployeeDialogOpen, setNewEmployeeDialogOpen] = useState(false);
   const [deleteDeptDialogOpen, setDeleteDeptDialogOpen] = useState(false);
 
+  const setDepartments = useContext(SetDepartmentsContext);
+  if (setDepartments === null) return null;
+
   const open = Boolean(anchorEl);
-  const handleClick = (event) => {
+
+  const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
   const handleClose = () => {
@@ -53,11 +60,11 @@ export default function DeptMenu({ dept }) {
 
     handleClose();
   };
-  const deleteDept = (depts) => {
+  const deleteDept = (depts: DepartmentProps[]) => {
     depts.forEach((d) => {
       if (d.id === dept.id) {
         depts.splice(depts.indexOf(d), 1);
-      } else if (d.branches && d.branches.length > 0) {
+      } else if (d.branches.length > 0) {
         deleteDept(d.branches);
       }
     });
@@ -70,11 +77,11 @@ export default function DeptMenu({ dept }) {
     });
     handleClose();
   };
-  const collapseOrExpand = (depts) => {
+  const collapseOrExpand = (depts: DepartmentProps[]) => {
     depts.forEach((d) => {
       if (d.id === dept.id) {
         d.collapse = !d.collapse;
-      } else if (d.branches && d.branches.length > 0) {
+      } else if (d.branches.length > 0) {
         collapseOrExpand(d.branches);
       }
     });

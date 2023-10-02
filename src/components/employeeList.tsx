@@ -1,6 +1,11 @@
-import Employee from "./Employee";
+import { FC } from "react";
+import Employee, { EmployeeProps } from "./Employee";
 
-export default function EmployeeList({ employees }) {
+interface Props {
+  employees: EmployeeProps[];
+}
+
+const EmployeeList: FC<Props> = ({ employees }) => {
   const noDataFound = (
     <div style={{ paddingTop: 10, paddingBottom: 10 }}>データがありません</div>
   );
@@ -35,4 +40,6 @@ export default function EmployeeList({ employees }) {
   } else {
     return noDataFound;
   }
-}
+};
+
+export default EmployeeList;

@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { FC, useContext, useState } from "react";
 
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
@@ -8,26 +8,44 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import Box from "@mui/material/Box";
-import toSuffix from "../utils/toSuffix";
 
 import SetDepartmentsContext from "../utils/SetDepartmentsContext";
+import toSuffix from "../utils/toSuffix";
+import { DepartmentProps } from "../components/Department";
 
-export default function DeptNameDialog({ open, setOpen, dept }) {
+interface Props {
+  open: boolean;
+  setOpen: (open: boolean) => void;
+  dept: DepartmentProps;
+}
+
+const NewDeptDialog: FC<Props> = ({ open, setOpen, dept }) => {
+  const [name, setName] = useState<string>("");
+
   const setDepartments = useContext(SetDepartmentsContext);
-  const suffix = toSuffix(dept.level);
-  const [deptName, setDeptName] = useState(dept.deptName);
+  if (setDepartments === null) return null;
+
+  const suffix: string = toSuffix(dept.level + 1);
 
   const handleClose = () => {
     setOpen(false);
   };
 
-  const updateDeptName = (depts) => {
+  const addDept = (depts: DepartmentProps[]) => {
     depts.forEach((d) => {
       if (d.id === dept.id) {
-        d.name = deptName;
+        d.branches.push({
+          id: crypto.randomUUID(),
+          name,
+          managers: [],
+          members: [],
+          branches: [],
+          level: d.level + 1,
+          collapse: false,
+        });
       }
-      if (d.branches && d.branches.length > 0) {
-        updateDeptName(d.branches);
+      if (d.branches.length > 0) {
+        addDept(d.branches);
       }
     });
   };
@@ -35,7 +53,7 @@ export default function DeptNameDialog({ open, setOpen, dept }) {
   const handleSave = () => {
     setDepartments((prev) => {
       const newDepts = structuredClone(prev);
-      updateDeptName(newDepts);
+      addDept(newDepts);
       return newDepts;
     });
 
@@ -45,24 +63,24 @@ export default function DeptNameDialog({ open, setOpen, dept }) {
   return (
     <div>
       <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>部署名を編集</DialogTitle>
+        <DialogTitle>新規部署を作成</DialogTitle>
         <DialogContent dividers={true}>
           <DialogContentText>
-            部署名を編集します。以下の項目を入力して右下の「保存する」ボタンを押してください。
+            新規部署を作成します。以下の項目を入力して右下の「保存する」ボタンを押してください。
           </DialogContentText>
           <Box sx={{ height: 10 }} />
           <div style={{ display: "flex", alignItems: "center" }}>
             <TextField
               autoFocus
               margin="dense"
-              id="deptName"
+              id="newDeptName"
               label="部署名"
               type="text"
               fullWidth
               variant="standard"
-              value={deptName}
+              value={name}
               onChange={(event) => {
-                setDeptName(event.target.value);
+                setName(event.target.value);
               }}
             />
             <div
@@ -79,4 +97,6 @@ export default function DeptNameDialog({ open, setOpen, dept }) {
       </Dialog>
     </div>
   );
-}
+};
+
+export default NewDeptDialog;
