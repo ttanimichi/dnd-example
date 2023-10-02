@@ -6,12 +6,12 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 
-type Props = {
+interface Props {
   open: boolean;
   setOpen: (open: boolean) => void;
   title?: string;
   message: string;
-};
+}
 
 const AlertDialog: FC<Props> = ({
   open,

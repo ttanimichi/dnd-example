@@ -10,11 +10,11 @@ export function createEmployee({
   employmentType,
 }: Partial<EmployeeProps>): EmployeeProps {
   return {
-    id: id || crypto.randomUUID(),
-    name: name || "新入社員",
-    grade: grade || "グレードE",
-    personMonth: personMonth || "1.0",
-    avatar: avatar || "/avatar.png",
+    id: id ?? crypto.randomUUID(),
+    name: name ?? "新入社員",
+    grade: grade ?? "グレードE",
+    personMonth: personMonth ?? "1.0",
+    avatar: avatar ?? "/avatar.png",
     employmentType,
   };
 }

@@ -57,8 +57,8 @@ function isDescendantSubTree(subTree: DepartmentProps, childId: string) {
   }
 
   if (subTree.branches && subTree.branches.length > 0) {
-    for (let i = 0; i < subTree.branches.length; i++) {
-      if (isDescendantSubTree(subTree.branches[i], childId)) {
+    for (const branch of subTree.branches) {
+      if (isDescendantSubTree(branch, childId)) {
         return true;
       }
     }
@@ -91,14 +91,14 @@ function addToChildrenById(
   id: string,
   value: DepartmentProps
 ) {
-  for (let i = 0; i < depts.length; i++) {
-    if (depts[i].id === id) {
-      depts[i].branches.push(value);
+  for (const dept of depts) {
+    if (dept.id === id) {
+      dept.branches.push(value);
       return;
     }
 
-    if (depts[i].branches && depts[i].branches.length > 0) {
-      addToChildrenById(depts[i].branches, id, value);
+    if (dept.branches && dept.branches.length > 0) {
+      addToChildrenById(dept.branches, id, value);
     }
   }
 }
@@ -107,8 +107,7 @@ function removeMember(
   depts: DepartmentProps[],
   memberId: string
 ): EmployeeProps | undefined {
-  for (let i = 0; i < depts.length; i++) {
-    const dept = depts[i];
+  for (const dept of depts) {
     const removedManagers = dept.managers.filter((n) => n.id === memberId);
     const removedMembers = dept.members.filter((n) => n.id === memberId);
 

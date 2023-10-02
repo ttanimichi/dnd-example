@@ -18,11 +18,11 @@ import UnfoldMoreIcon from "@mui/icons-material/UnfoldMore";
 import ShoppingCartDialog from "./ShoppingCartDialog";
 import { DepartmentProps } from "./Department";
 
-type Props = {
+interface Props {
   departments: DepartmentProps[];
   undo: () => void;
   redo: () => void;
-};
+}
 
 const Header: FC<Props> = ({ departments, undo, redo }) => {
   const [shoppingCartDialogOpen, setShoppingCartDialogOpen] = useState(false);
@@ -49,7 +49,7 @@ const Header: FC<Props> = ({ departments, undo, redo }) => {
       const reader = new FileReader();
       reader.readAsText(file, "UTF-8");
       reader.onload = (readerEvent) => {
-        const content = (readerEvent.target as FileReader).result;
+        const content = (readerEvent.target!).result;
         const depts = JSON.parse(content as string) as DepartmentProps[];
         setDepartments(() => depts);
       };

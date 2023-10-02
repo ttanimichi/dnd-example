@@ -1,13 +1,13 @@
 import { ReactNode } from "react";
 import { useDraggable } from "@dnd-kit/core";
 
-type Props = {
+interface Props {
   id: string;
   data: {
     type: string;
   };
   children: ReactNode;
-};
+}
 
 export function Draggable({ id, data, children }: Props) {
   const { isDragging, attributes, listeners, setNodeRef, transform } =

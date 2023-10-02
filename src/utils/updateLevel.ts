@@ -2,7 +2,7 @@ import { DepartmentProps } from "../components/Department";
 
 export default function updateLevel(
   depts: DepartmentProps[],
-  level: number = 0
+  level = 0
 ): DepartmentProps[] {
   return depts.map((dept: DepartmentProps) => {
     dept.level = level;

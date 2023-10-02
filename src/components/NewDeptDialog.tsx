@@ -13,11 +13,11 @@ import SetDepartmentsContext from "../utils/SetDepartmentsContext";
 import toSuffix from "../utils/toSuffix";
 import { DepartmentProps } from "../components/Department";
 
-type Props = {
+interface Props {
   open: boolean;
   setOpen: (open: boolean) => void;
   dept: DepartmentProps;
-};
+}
 
 const NewDeptDialog: FC<Props> = ({ open, setOpen, dept }) => {
   const [name, setName] = useState<string>("");

@@ -9,11 +9,11 @@ import Box from "@mui/material/Box";
 import { DepartmentProps } from "./Department";
 // import initialDepartments from "../utils/initialDepartments";
 
-type Props = {
+interface Props {
   open: boolean;
   setOpen: (open: boolean) => void;
   departments: DepartmentProps[];
-};
+}
 
 const ShoppingCartDialog: FC<Props> = ({ open, setOpen, departments }) => {
   // const departmentNames = buildDepartmentNames(departments);

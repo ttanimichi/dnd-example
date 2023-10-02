@@ -4,7 +4,7 @@ import Chip from "@mui/material/Chip";
 import Stack from "@mui/material/Stack";
 import EmployeeMenu from "./EmployeeMenu";
 
-export type EmployeeProps = {
+export interface EmployeeProps {
   id: string;
   name: string;
   grade: string;
@@ -14,7 +14,7 @@ export type EmployeeProps = {
   isRetired?: boolean;
   isSuspended?: boolean;
   employmentType?: string;
-};
+}
 
 const Employee: FC<EmployeeProps> = ({
   id,
@@ -27,7 +27,7 @@ const Employee: FC<EmployeeProps> = ({
   isSuspended,
 }) => {
   const nameStyle =
-    isRetired || isSuspended
+    isRetired ?? isSuspended
       ? { textDecoration: "line-through" }
       : { fontWeight: "bold" };
 

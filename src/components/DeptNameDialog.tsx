@@ -12,11 +12,11 @@ import toSuffix from "../utils/toSuffix";
 import SetDepartmentsContext from "../utils/SetDepartmentsContext";
 import { DepartmentProps } from "../components/Department";
 
-type Props = {
+interface Props {
   open: boolean;
   setOpen: (open: boolean) => void;
   dept: DepartmentProps;
-};
+}
 
 const DeptNameDialog: FC<Props> = ({ open, setOpen, dept }) => {
   const suffix: string = toSuffix(dept.level);

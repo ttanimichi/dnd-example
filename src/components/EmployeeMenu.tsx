@@ -7,9 +7,9 @@ import SetDepartmentsContext from "../utils/SetDepartmentsContext";
 import { EmployeeProps } from "./Employee";
 import { DepartmentProps } from "./Department";
 
-type Props = {
+interface Props {
   employee: EmployeeProps;
-};
+}
 
 export default function EmployeeMenu({ employee }: Props) {
   const [dialogOpen, setDialogOpen] = useState<boolean>(false);

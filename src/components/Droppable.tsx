@@ -1,14 +1,14 @@
 import { ReactNode } from "react";
 import { useDroppable } from "@dnd-kit/core";
 
-type Props = {
+interface Props {
   id: string;
   data?: {
     type: string;
   };
   disabled?: boolean;
   children: ReactNode;
-};
+}
 
 export function Droppable({ id, data, disabled, children }: Props) {
   const { isOver, setNodeRef } = useDroppable({

@@ -7,7 +7,7 @@ import toSuffix from "../utils/toSuffix";
 import EmployeeList from "./employeeList";
 import { EmployeeProps } from "./Employee";
 
-export type DepartmentProps = {
+export interface DepartmentProps {
   id: string | number;
   name: string;
   level: number;
@@ -15,7 +15,7 @@ export type DepartmentProps = {
   members: EmployeeProps[];
   managers: EmployeeProps[];
   branches: DepartmentProps[];
-};
+}
 
 const Department: FC<DepartmentProps> = ({
   id,

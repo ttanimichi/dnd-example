@@ -9,9 +9,9 @@ import AlertDialog from "./AlertDialog";
 import SetDepartmentsContext from "../utils/SetDepartmentsContext";
 import { DepartmentProps } from "./Department";
 
-type Props = {
+interface Props {
   dept: DepartmentProps;
-};
+}
 
 export default function DeptMenu({ dept }: Props) {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);

@@ -1,9 +1,9 @@
 import { FC } from "react";
 import Employee, { EmployeeProps } from "./Employee";
 
-type Props = {
+interface Props {
   employees: EmployeeProps[];
-};
+}
 
 const EmployeeList: FC<Props> = ({ employees }) => {
   const noDataFound = (

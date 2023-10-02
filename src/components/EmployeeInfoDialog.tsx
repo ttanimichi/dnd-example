@@ -91,11 +91,11 @@ function PersonMonthSelect({
   );
 }
 
-type Props = {
+interface Props {
   open: boolean;
   setOpen: (open: boolean) => void;
   employee: EmployeeProps;
-};
+}
 
 const EmployeeInfoDialog: FC<Props> = ({ open, setOpen, employee }) => {
   const [grade, setGrade] = useState(employee.grade);
