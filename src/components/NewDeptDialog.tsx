@@ -62,7 +62,11 @@ const NewDeptDialog: FC<Props> = ({ open, setOpen, dept }) => {
 
   return (
     <div>
-      <Dialog open={open} onClose={handleClose}>
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        data-dndkit-disabled-dnd-flag="true"
+      >
         <DialogTitle>新規部署を作成</DialogTitle>
         <DialogContent dividers={true}>
           <DialogContentText>

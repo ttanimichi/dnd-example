@@ -107,6 +107,7 @@ export default function DeptMenu({ dept }: Props) {
         MenuListProps={{
           "aria-labelledby": "basic-button",
         }}
+        data-dndkit-disabled-dnd-flag="true"
       >
         <MenuItem onClick={openNewEmployeeDialog}>新入社員を追加</MenuItem>
         <MenuItem onClick={openDeleteDeptDialog}>この部署を廃止</MenuItem>

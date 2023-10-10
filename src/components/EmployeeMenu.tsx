@@ -121,6 +121,7 @@ export default function EmployeeMenu({ employee }: Props) {
           MenuListProps={{
             "aria-labelledby": "basic-button",
           }}
+          data-dndkit-disabled-dnd-flag="true"
         >
           <MenuItem
             onClick={() => {
