@@ -51,7 +51,11 @@ const DeptNameDialog: FC<Props> = ({ open, setOpen, dept }) => {
 
   return (
     <div>
-      <Dialog open={open} onClose={handleClose}>
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        data-dndkit-disabled-dnd-flag="true"
+      >
         <DialogTitle>部署名を編集</DialogTitle>
         <DialogContent dividers={true}>
           <DialogContentText>

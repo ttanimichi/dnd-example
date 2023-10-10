@@ -25,7 +25,11 @@ const AlertDialog: FC<Props> = ({
 
   return (
     <div>
-      <Dialog open={open} onClose={handleClose}>
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        data-dndkit-disabled-dnd-flag="true"
+      >
         <DialogTitle>{title}</DialogTitle>
         <DialogContent dividers={true}>
           <DialogContentText>{message}</DialogContentText>

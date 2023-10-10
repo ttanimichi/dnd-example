@@ -28,7 +28,11 @@ const ShoppingCartDialog: FC<Props> = ({ open, setOpen, departments }) => {
 
   return (
     <div>
-      <Dialog open={open} onClose={handleClose}>
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        data-dndkit-disabled-dnd-flag="true"
+      >
         <DialogTitle>買い物かご</DialogTitle>
         <DialogContent dividers={true}>
           <DialogContentText>

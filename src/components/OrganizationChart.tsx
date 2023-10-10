@@ -12,7 +12,7 @@ import TargetContext from "../utils/TargetContext";
 import SetTargetContext, {
   SetTargetStateType,
 } from "../utils/setTargetContext";
-import { useContext } from "react";
+import { useContext, MouseEvent } from "react";
 import updateLevel from "../utils/updateLevel";
 import { EmployeeProps } from "./Employee";
 
@@ -142,13 +142,41 @@ function addMember(
   });
 }
 
+function shouldHandleEvent(element: HTMLElement | null) {
+  let cur = element;
+
+  while (cur) {
+    if (cur.dataset.dndkitDisabledDndFlag) {
+      return false;
+    }
+    cur = cur.parentElement;
+  }
+
+  return true;
+}
+
+// モーダルやメニューなどドラッグ&ドロップの対象から除外したい要素には
+// data-dndkit-disabled-dnd-flag="true"
+// という属性を付与する
+// ref.https://www.gaji.jp/blog/2022/02/24/9184/
+class CustomMouseSensor extends MouseSensor {
+  static activators = [
+    {
+      eventName: "onMouseDown" as const,
+      handler: ({ nativeEvent: event }: MouseEvent): boolean => {
+        return shouldHandleEvent(event.target as HTMLElement);
+      },
+    },
+  ];
+}
+
 export default function OrganizationChart({
   departments,
 }: {
   departments: DepartmentProps[];
 }) {
   const sensors = useSensors(
-    useSensor(MouseSensor, { activationConstraint: { distance: 3 } })
+    useSensor(CustomMouseSensor, { activationConstraint: { distance: 3 } })
   );
 
   const target = useContext<string | null>(TargetContext);

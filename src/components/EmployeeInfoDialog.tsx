@@ -155,7 +155,11 @@ const EmployeeInfoDialog: FC<Props> = ({ open, setOpen, employee }) => {
 
   return (
     <div>
-      <Dialog open={open} onClose={handleClose}>
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        data-dndkit-disabled-dnd-flag="true"
+      >
         <DialogTitle>従業員情報を編集</DialogTitle>
         <DialogContent dividers={true}>
           <DialogContentText>
