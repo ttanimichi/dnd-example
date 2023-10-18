@@ -8,7 +8,7 @@ import EmployeeList from "./employeeList";
 import { EmployeeProps } from "./Employee";
 
 export interface DepartmentProps {
-  id: string | number;
+  id: string;
   name: string;
   level: number;
   collapse: boolean;

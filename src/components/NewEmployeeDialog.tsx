@@ -20,6 +20,7 @@ import SetDepartmentsContext from "../utils/SetDepartmentsContext";
 
 import { createEmployee } from "../utils/createEmployees";
 import { DepartmentProps } from "./Department";
+import toEmployeeType from "../utils/toEmployeeType";
 
 function TypeSelect({
   type,
@@ -42,9 +43,13 @@ function TypeSelect({
         label="採用種別"
         onChange={handleChange}
       >
-        <MenuItem value={"mid_career"}>中途採用</MenuItem>
-        <MenuItem value={"new_graduate"}>新卒採用</MenuItem>
-        <MenuItem value={"handicapped"}>障害者採用</MenuItem>
+        <MenuItem value={"mid_career"}>{toEmployeeType("mid_career")}</MenuItem>
+        <MenuItem value={"new_graduate"}>
+          {toEmployeeType("new_graduate")}
+        </MenuItem>
+        <MenuItem value={"handicapped"}>
+          {toEmployeeType("handicapped")}
+        </MenuItem>
       </Select>
     </FormControl>
   );
