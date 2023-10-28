@@ -10,7 +10,6 @@ import Stack from "@mui/material/Stack";
 import UndoIcon from "@mui/icons-material/Undo";
 import RedoIcon from "@mui/icons-material/Redo";
 import SetDepartmentsContext from "../utils/SetDepartmentsContext";
-import initialDepartments from "../utils/initialDepartments";
 import UploadIcon from "@mui/icons-material/Upload";
 import DownloadIcon from "@mui/icons-material/Download";
 import UnfoldLessIcon from "@mui/icons-material/UnfoldLess";
@@ -115,7 +114,7 @@ const Header: FC<Props> = ({ departments, undo, redo }) => {
               startIcon={<DownloadIcon />}
               onClick={handleExport}
             >
-              エクスポート
+              出力
             </Button>
             <Button
               color="inherit"
@@ -131,7 +130,7 @@ const Header: FC<Props> = ({ departments, undo, redo }) => {
               startIcon={<UnfoldLessIcon />}
               onClick={handleCollapse}
             >
-              折りたたみ
+              折り畳む
             </Button>
             <Button
               color="inherit"
@@ -146,10 +145,11 @@ const Header: FC<Props> = ({ departments, undo, redo }) => {
               variant="outlined"
               startIcon={<FactoryIcon />}
               onClick={() => {
-                setDepartments(() => initialDepartments);
+                localStorage.clear();
+                location.reload();
               }}
             >
-              初期状態にリセット
+              初期化
             </Button>
             <Button
               color="inherit"

@@ -7,7 +7,6 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import Box from "@mui/material/Box";
 import { DepartmentProps } from "./Department";
-import initialDepartments from "../utils/initialDepartments";
 import toSuffix from "../utils/toSuffix";
 import toEmployeeType from "../utils/toEmployeeType";
 
@@ -107,6 +106,10 @@ function flattenEmployees(departments: DepartmentProps[]) {
 }
 
 const ShoppingCartDialog: FC<Props> = ({ open, setOpen, departments }) => {
+  const initialDepartments = JSON.parse(
+    localStorage.getItem("initialDepartments") ?? "[]"
+  ) as DepartmentProps[];
+
   const departmentArray = flattenDepartments(departments);
   const initialDepartmentArray = flattenDepartments(initialDepartments);
   const employeeArray = flattenEmployees(departments);

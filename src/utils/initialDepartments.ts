@@ -73,26 +73,32 @@ const depts: any[] = [
   },
 ];
 
-function buildDepartments(depts: any[]) {
-  depts.forEach((dept) => {
-    dept.id = crypto.randomUUID();
-    dept.managers = createEmployees(1);
-    dept.members = createEmployees(2);
-    dept.collapse = false;
-    dept.level = -1;
+function build(depts: any[]) {
+  const buildDepartments = (depts: any[]) => {
+    depts.forEach((dept) => {
+      dept.id = crypto.randomUUID();
+      dept.managers = createEmployees(1);
+      dept.members = createEmployees(2);
+      dept.collapse = false;
+      dept.level = -1;
 
-    if (dept.branches && dept.branches.length > 0) {
-      buildDepartments(dept.branches as any[]);
-    }
-  });
+      if (dept.branches && dept.branches.length > 0) {
+       buildDepartments(dept.branches as any[]);
+      }
+    });
+  }
+
+  buildDepartments(depts);
+
+  // The top level department doesn't have managers
+  depts[0].managers = [];
+
+  const initialDepts = depts as DepartmentProps[];
+  updateLevel(initialDepts);
+
+  return initialDepts;
 }
 
-buildDepartments(depts);
-
-// The top level department doesn't have managers
-depts[0].managers = [];
-
-const initialDepartments = depts as DepartmentProps[];
-updateLevel(initialDepartments);
+const initialDepartments = build(depts);
 
 export default initialDepartments;
