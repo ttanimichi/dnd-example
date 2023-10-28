@@ -7,7 +7,8 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import Box from "@mui/material/Box";
 import { DepartmentProps } from "./Department";
-// import initialDepartments from "../utils/initialDepartments";
+import toSuffix from "../utils/toSuffix";
+import toEmployeeType from "../utils/toEmployeeType";
 
 interface Props {
   open: boolean;
@@ -15,12 +16,244 @@ interface Props {
   departments: DepartmentProps[];
 }
 
-const ShoppingCartDialog: FC<Props> = ({ open, setOpen, departments }) => {
-  // const departmentNames = buildDepartmentNames(departments);
-  // const initialDepartmentNames = buildDepartmentNames(initialDepartments);
+function flattenDepartments(
+  departments: DepartmentProps[],
+  parentName?: string,
+  parentId?: string,
+  parentLevel?: number
+): {
+  name: string;
+  id: string;
+  level: number;
+  parentName?: string;
+  parentId?: string;
+  parentLevel?: number;
+}[] {
+  let flatDepartments: {
+    name: string;
+    id: string;
+    level: number;
+    parentName?: string;
+    parentId?: string;
+    parentLevel?: number;
+  }[] = [];
 
-  // NOTE: コンパイルエラーにならないよう一時的に参照させている仮実装
-  departments;
+  departments.forEach((department) => {
+    flatDepartments.push({
+      name: department.name,
+      id: department.id,
+      level: department.level,
+      parentName: parentName,
+      parentId: parentId,
+      parentLevel: parentLevel,
+    });
+
+    if (department.branches.length > 0) {
+      flatDepartments = flatDepartments.concat(
+        flattenDepartments(
+          department.branches,
+          department.name,
+          department.id,
+          department.level
+        )
+      );
+    }
+  });
+
+  return flatDepartments;
+}
+
+function flattenEmployees(departments: DepartmentProps[]) {
+  let flatEmployees: {
+    name: string;
+    id: string;
+    employmentType: string;
+    isRetired: boolean;
+    isSuspended: boolean;
+    grade: string;
+    personMonth: string;
+    departmentName: string;
+    departmentId: string;
+    departmentLevel: number;
+  }[] = [];
+
+  departments.forEach((department) => {
+    flatEmployees = flatEmployees.concat(
+      department.members.concat(department.managers).map((employee) => {
+        return {
+          name: employee.name,
+          id: employee.id,
+          employmentType: employee.employmentType ?? "",
+          isRetired: employee.isRetired ?? false,
+          isSuspended: employee.isSuspended ?? false,
+          grade: employee.grade,
+          personMonth: employee.personMonth,
+          departmentName: department.name,
+          departmentId: department.id,
+          departmentLevel: department.level,
+        };
+      })
+    );
+
+    if (department.branches.length > 0) {
+      flatEmployees = flatEmployees.concat(
+        flattenEmployees(department.branches)
+      );
+    }
+  });
+
+  return flatEmployees;
+}
+
+const ShoppingCartDialog: FC<Props> = ({ open, setOpen, departments }) => {
+  const initialDepartments = JSON.parse(
+    localStorage.getItem("initialDepartments") ?? "[]"
+  ) as DepartmentProps[];
+
+  const departmentArray = flattenDepartments(departments);
+  const initialDepartmentArray = flattenDepartments(initialDepartments);
+  const employeeArray = flattenEmployees(departments);
+  const initialEmployeeArray = flattenEmployees(initialDepartments);
+
+  const newDepartmentNames = departmentArray
+    .filter(
+      (dept) =>
+        !initialDepartmentArray.some(
+          (initialDept) => initialDept.id === dept.id
+        )
+    )
+    .map((dept) => `${dept.name}${toSuffix(dept.level)}`);
+
+  const deletedDepartmentNames = initialDepartmentArray
+    .filter(
+      (dept) =>
+        !departmentArray.some((initialDept) => initialDept.id === dept.id)
+    )
+    .map((dept) => `${dept.name}${toSuffix(dept.level)}`);
+
+  const changedDepartmentInfo = departmentArray
+    .filter((dept) => {
+      const initialDept = initialDepartmentArray.find(
+        (initialDept) => initialDept.id === dept.id
+      );
+      return initialDept !== undefined && initialDept.name !== dept.name;
+    })
+    .map((dept) => {
+      const initialDept = initialDepartmentArray.find(
+        (initialDept) => initialDept.id === dept.id
+      );
+      return {
+        initialName: `${initialDept?.name}${toSuffix(initialDept?.level ?? 0)}`,
+        changedName: `${dept.name}${toSuffix(dept.level)}`,
+      };
+    });
+
+  const movedDepartments = departmentArray
+    .filter((dept) => {
+      const initialDept = initialDepartmentArray.find(
+        (initialDept) => initialDept.id === dept.id
+      );
+      return (
+        initialDept !== undefined && initialDept.parentId !== dept.parentId
+      );
+    })
+    .map((dept) => {
+      const initialDept = initialDepartmentArray.find(
+        (initialDept) => initialDept.id === dept.id
+      );
+      return {
+        name: `${dept.name}${toSuffix(dept.level)}`,
+        oldParentName: initialDept
+          ? `${initialDept.parentName}${toSuffix(initialDept.parentLevel ?? 0)}`
+          : null,
+        newParentName: `${dept.parentName}${toSuffix(dept.parentLevel ?? 0)}`,
+      };
+    });
+
+  const newEmployees = employeeArray.filter(
+    (employee) =>
+      !initialEmployeeArray.some(
+        (initialEmployee) => initialEmployee.id === employee.id
+      )
+  );
+
+  const deletedEmployees = employeeArray.filter(
+    (employee) => employee.isRetired
+  );
+
+  const suspendEmployees = employeeArray.filter(
+    (employee) => employee.isSuspended
+  );
+
+  const changedGradeEmployees = employeeArray
+    .filter((employee) => {
+      const initialEmployee = initialEmployeeArray.find(
+        (initialEmployee) => initialEmployee.id === employee.id
+      );
+      return (
+        initialEmployee !== undefined &&
+        initialEmployee.grade !== employee.grade
+      );
+    })
+    .map((employee) => {
+      const initialEmployee = initialEmployeeArray.find(
+        (initialEmployee) => initialEmployee.id === employee.id
+      );
+      return {
+        id: employee.id,
+        name: employee.name,
+        grade: employee.grade,
+        initialGrade: initialEmployee?.grade ?? "",
+      };
+    });
+
+  const changedPersonMonthEmployees = employeeArray
+    .filter((employee) => {
+      const initialEmployee = initialEmployeeArray.find(
+        (initialEmployee) => initialEmployee.id === employee.id
+      );
+      return (
+        initialEmployee !== undefined &&
+        initialEmployee.personMonth !== employee.personMonth
+      );
+    })
+    .map((employee) => {
+      const initialEmployee = initialEmployeeArray.find(
+        (initialEmployee) => initialEmployee.id === employee.id
+      );
+      return {
+        id: employee.id,
+        name: employee.name,
+        personMonth: employee.personMonth,
+        initialPersonMonth: initialEmployee?.personMonth ?? "",
+      };
+    });
+
+  const movedEmployees = employeeArray
+    .filter((employee) => {
+      const initialEmployee = initialEmployeeArray.find(
+        (initialEmployee) => initialEmployee.id === employee.id
+      );
+      return (
+        initialEmployee !== undefined &&
+        initialEmployee.departmentId !== employee.departmentId
+      );
+    })
+    .map((employee) => {
+      const initialEmployee = initialEmployeeArray.find(
+        (initialEmployee) => initialEmployee.id === employee.id
+      );
+      return {
+        id: employee.id,
+        name: employee.name,
+        departmentName: `${employee.departmentName}${toSuffix(
+          employee.departmentLevel
+        )}`,
+        initialDepartmentName: `${initialEmployee?.departmentName}${toSuffix(
+          initialEmployee?.departmentLevel ?? 0
+        )}`,
+      };
+    });
 
   const handleClose = () => {
     setOpen(false);
@@ -42,71 +275,129 @@ const ShoppingCartDialog: FC<Props> = ({ open, setOpen, departments }) => {
           <div>
             <h3>新設の部署</h3>
             <ul>
-              <li>新規営業チーム</li>
-              <li>人事ユニット</li>
+              {newDepartmentNames.length > 0 ? (
+                newDepartmentNames.map((name) => <li key={name}>{name}</li>)
+              ) : (
+                <li>該当なし</li>
+              )}
             </ul>
           </div>
           <div>
             <h3>廃止する部署</h3>
             <ul>
-              <li>新規営業チーム</li>
-              <li>人事ユニット</li>
+              {deletedDepartmentNames.length > 0 ? (
+                deletedDepartmentNames.map((name) => <li key={name}>{name}</li>)
+              ) : (
+                <li>該当なし</li>
+              )}
             </ul>
           </div>
           <div>
             <h3>部署名の変更</h3>
             <ul>
-              <li>新規営業チーム → 第二営業チーム</li>
-              <li>人事ユニット → 労務ユニット</li>
+              {changedDepartmentInfo.length > 0 ? (
+                changedDepartmentInfo.map((dept) => (
+                  <li key={dept.initialName}>
+                    {dept.initialName} → {dept.changedName}
+                  </li>
+                ))
+              ) : (
+                <li>該当なし</li>
+              )}
             </ul>
           </div>
           <div>
             <h3>配置が変更された部署</h3>
             <ul>
-              <li>新規営業チーム（第一営業ユニット → 第三営業ユニット）</li>
-              <li>人事ユニット（経営管理グループ → 開発グループ）</li>
+              {movedDepartments.length > 0 ? (
+                movedDepartments.map((dept) => (
+                  <li key={dept.name}>
+                    {dept.name}：{dept.oldParentName} → {dept.newParentName}
+                  </li>
+                ))
+              ) : (
+                <li>該当なし</li>
+              )}
             </ul>
           </div>
           <div>
             <h3>新入社員</h3>
             <ul>
-              <li>山田 太郎（中途採用）</li>
-              <li>佐藤 一郎（障害者採用）</li>
+              {newEmployees.length > 0 ? (
+                newEmployees.map((employee) => (
+                  <li key={employee.id}>
+                    {employee.name}（{toEmployeeType(employee.employmentType)}）
+                  </li>
+                ))
+              ) : (
+                <li>該当なし</li>
+              )}
             </ul>
           </div>
           <div>
             <h3>退職</h3>
             <ul>
-              <li>山田 太郎</li>
-              <li>佐藤 一郎</li>
+              {deletedEmployees.length > 0 ? (
+                deletedEmployees.map((employee) => (
+                  <li key={employee.id}>{employee.name}</li>
+                ))
+              ) : (
+                <li>該当なし</li>
+              )}
             </ul>
           </div>
           <div>
             <h3>休職</h3>
             <ul>
-              <li>山田 太郎</li>
-              <li>佐藤 一郎</li>
+              {suspendEmployees.length > 0 ? (
+                suspendEmployees.map((employee) => (
+                  <li key={employee.id}>{employee.name}</li>
+                ))
+              ) : (
+                <li>該当なし</li>
+              )}
             </ul>
           </div>
           <div>
             <h3>昇格・降格</h3>
             <ul>
-              <li>山田 太郎（グレードB → グレードA）</li>
-              <li>佐藤 一郎（グレードC → グレードD）</li>
+              {changedGradeEmployees.length > 0 ? (
+                changedGradeEmployees.map((employee) => (
+                  <li key={employee.id}>
+                    {`${employee.name}（${employee.initialGrade} → ${employee.grade}）`}
+                  </li>
+                ))
+              ) : (
+                <li>該当なし</li>
+              )}
             </ul>
           </div>
           <div>
             <h3>人月の変更</h3>
             <ul>
-              <li>山田 太郎（1.0 → 0.8）</li>
-              <li>佐藤 一郎（0.6 → 0.8）</li>
+              {changedPersonMonthEmployees.length > 0 ? (
+                changedPersonMonthEmployees.map((employee) => (
+                  <li key={employee.id}>
+                    {`${employee.name}（${employee.initialPersonMonth} → ${employee.personMonth}）`}
+                  </li>
+                ))
+              ) : (
+                <li>該当なし</li>
+              )}
             </ul>
           </div>
           <div>
             <h3>異動</h3>
             <ul>
-              <li>新規営業チーム（第一営業ユニット → 第三営業ユニット）</li>
-              <li>人事ユニット（経営管理グループ → 開発グループ）</li>
+              {movedEmployees.length > 0 ? (
+                movedEmployees.map((employee) => (
+                  <li key={employee.id}>
+                    {`${employee.name}（${employee.initialDepartmentName} → ${employee.departmentName}）`}
+                  </li>
+                ))
+              ) : (
+                <li>該当なし</li>
+              )}
             </ul>
           </div>
         </DialogContent>
