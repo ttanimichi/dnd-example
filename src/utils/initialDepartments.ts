@@ -90,9 +90,6 @@ function build(depts: any[]) {
 
   buildDepartments(depts);
 
-  // The top level department doesn't have managers
-  depts[0].managers = [];
-
   const initialDepts = depts as DepartmentProps[];
   updateLevel(initialDepts);
 
