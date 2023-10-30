@@ -164,11 +164,13 @@ const Header: FC<Props> = ({ departments, undo, redo }) => {
           </Stack>
         </Toolbar>
       </AppBar>
-      <ShoppingCartDialog
-        open={shoppingCartDialogOpen}
-        setOpen={setShoppingCartDialogOpen}
-        departments={departments}
-      />
+      {shoppingCartDialogOpen && (
+        <ShoppingCartDialog
+          open={shoppingCartDialogOpen}
+          setOpen={setShoppingCartDialogOpen}
+          departments={departments}
+        />
+      )}
     </Box>
   );
 };
