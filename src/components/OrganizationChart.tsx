@@ -179,7 +179,7 @@ export default function OrganizationChart({
     useSensor(CustomMouseSensor, { activationConstraint: { distance: 3 } })
   );
 
-  const target = useContext<string | null>(TargetContext);
+  const target = useContext<string>(TargetContext);
   const setTarget = useContext<SetTargetStateType>(SetTargetContext);
   const setDepartments = useContext(SetDepartmentsContext);
 
@@ -200,7 +200,7 @@ export default function OrganizationChart({
     const { active } = event;
     if (setTarget === null) return;
 
-    setTarget(active.data.current?.type as string | null);
+    setTarget(active.data.current?.type as string);
   }
 
   function handleDragEnd(event: DragEndEvent) {

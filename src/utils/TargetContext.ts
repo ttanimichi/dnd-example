@@ -1,4 +1,4 @@
 import { createContext } from "react";
 
-const TargetContext = createContext<string | null>(null);
+const TargetContext = createContext<string>("employee");
 export default TargetContext;
