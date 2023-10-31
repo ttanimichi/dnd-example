@@ -42,6 +42,7 @@ const NewDeptDialog: FC<Props> = ({ open, setOpen, dept }) => {
           branches: [],
           level: d.level + 1,
           collapse: false,
+          isVisible: true,
         });
       }
       if (d.branches.length > 0) {

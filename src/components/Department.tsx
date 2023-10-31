@@ -12,6 +12,7 @@ export interface DepartmentProps {
   name: string;
   level: number;
   collapse: boolean;
+  isVisible: boolean;
   members: EmployeeProps[];
   managers: EmployeeProps[];
   branches: DepartmentProps[];
@@ -24,9 +25,13 @@ const Department: FC<DepartmentProps> = ({
   members,
   level,
   collapse,
+  isVisible,
   branches,
 }) => {
   const target = useContext(TargetContext);
+
+  if (!isVisible) return null;
+
   const suffix = toSuffix(level);
 
   const DeptHeader: FC = () => (
@@ -40,7 +45,16 @@ const Department: FC<DepartmentProps> = ({
     >
       <div>{`${name}${suffix}`}</div>
       <DeptMenu
-        dept={{ id, name, managers, members, level, collapse, branches }}
+        dept={{
+          id,
+          name,
+          managers,
+          members,
+          level,
+          collapse,
+          isVisible,
+          branches,
+        }}
       />
     </div>
   );

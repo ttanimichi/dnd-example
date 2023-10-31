@@ -80,6 +80,7 @@ function build(depts: any[]) {
       dept.managers = createEmployees(1);
       dept.members = createEmployees(2);
       dept.collapse = false;
+      dept.isVisible = false;
       dept.level = -1;
 
       if (dept.branches && dept.branches.length > 0) {
