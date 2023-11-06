@@ -99,4 +99,6 @@ function build(depts: any[]) {
 
 const initialDepartments = build(depts);
 
+initialDepartments[0].isVisible = true;
+
 export default initialDepartments;
