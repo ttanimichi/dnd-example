@@ -14,8 +14,11 @@ import UploadIcon from "@mui/icons-material/Upload";
 import DownloadIcon from "@mui/icons-material/Download";
 import UnfoldLessIcon from "@mui/icons-material/UnfoldLess";
 import UnfoldMoreIcon from "@mui/icons-material/UnfoldMore";
+import GroupsIcon from "@mui/icons-material/Groups";
 import ShoppingCartDialog from "./ShoppingCartDialog";
+
 import { DepartmentProps } from "./Department";
+import VisibleGroupsDialog from "./VisibleGroupsDialog";
 
 interface Props {
   departments: DepartmentProps[];
@@ -25,6 +28,8 @@ interface Props {
 
 const Header: FC<Props> = ({ departments, undo, redo }) => {
   const [shoppingCartDialogOpen, setShoppingCartDialogOpen] = useState(false);
+  const [visibleGroupsDialogOpen, setVisibleGroupsDialogOpen] = useState(true);
+
   const setDepartments = useContext(SetDepartmentsContext);
   if (setDepartments === null) return null;
 
@@ -92,6 +97,16 @@ const Header: FC<Props> = ({ departments, undo, redo }) => {
             ドラッグ＆ドロップできる組織図
           </Typography>
           <Stack spacing={2} direction="row">
+            <Button
+              color="inherit"
+              variant="outlined"
+              startIcon={<GroupsIcon />}
+              onClick={() => {
+                setVisibleGroupsDialogOpen(true);
+              }}
+            >
+              グループ選択
+            </Button>
             <Button
               color="inherit"
               variant="outlined"
@@ -168,6 +183,13 @@ const Header: FC<Props> = ({ departments, undo, redo }) => {
         <ShoppingCartDialog
           open={shoppingCartDialogOpen}
           setOpen={setShoppingCartDialogOpen}
+          departments={departments}
+        />
+      )}
+      {visibleGroupsDialogOpen && (
+        <VisibleGroupsDialog
+          open={visibleGroupsDialogOpen}
+          setOpen={setVisibleGroupsDialogOpen}
           departments={departments}
         />
       )}

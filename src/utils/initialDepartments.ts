@@ -80,6 +80,7 @@ function build(depts: any[]) {
       dept.managers = createEmployees(1);
       dept.members = createEmployees(2);
       dept.collapse = false;
+      dept.isVisible = false;
       dept.level = -1;
 
       if (dept.branches && dept.branches.length > 0) {
@@ -90,9 +91,6 @@ function build(depts: any[]) {
 
   buildDepartments(depts);
 
-  // The top level department doesn't have managers
-  depts[0].managers = [];
-
   const initialDepts = depts as DepartmentProps[];
   updateLevel(initialDepts);
 
@@ -100,5 +98,7 @@ function build(depts: any[]) {
 }
 
 const initialDepartments = build(depts);
+
+initialDepartments[0].isVisible = true;
 
 export default initialDepartments;

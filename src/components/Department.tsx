@@ -12,6 +12,7 @@ export interface DepartmentProps {
   name: string;
   level: number;
   collapse: boolean;
+  isVisible: boolean;
   members: EmployeeProps[];
   managers: EmployeeProps[];
   branches: DepartmentProps[];
@@ -24,9 +25,13 @@ const Department: FC<DepartmentProps> = ({
   members,
   level,
   collapse,
+  isVisible,
   branches,
 }) => {
   const target = useContext(TargetContext);
+
+  if (!isVisible) return null;
+
   const suffix = toSuffix(level);
 
   const DeptHeader: FC = () => (
@@ -40,45 +45,39 @@ const Department: FC<DepartmentProps> = ({
     >
       <div>{`${name}${suffix}`}</div>
       <DeptMenu
-        dept={{ id, name, managers, members, level, collapse, branches }}
+        dept={{
+          id,
+          name,
+          managers,
+          members,
+          level,
+          collapse,
+          isVisible,
+          branches,
+        }}
       />
     </div>
   );
 
   const DeptBody: FC = () => (
     <div style={{ borderTop: "1px solid grey" }}>
-      {level === 0 ? (
-        <>
-          <Droppable
-            key={`members/${id}`}
-            id={`members/${id}`}
-            disabled={target !== "employee"}
-          >
-            <div style={{ height: 10 }}></div>
-            <EmployeeList employees={members} />
-          </Droppable>
-        </>
-      ) : (
-        <>
-          <Droppable
-            key={`managers/${id}`}
-            id={`managers/${id}`}
-            disabled={target !== "employee"}
-          >
-            <div style={{ paddingTop: 10, paddingBottom: 10 }}>部門長</div>
-            <EmployeeList employees={managers} />
-          </Droppable>
-          <hr style={{ margin: 0 }} />
-          <Droppable
-            key={`members/${id}`}
-            id={`members/${id}`}
-            disabled={target !== "employee"}
-          >
-            <div style={{ paddingTop: 10, paddingBottom: 10 }}>メンバー</div>
-            <EmployeeList employees={members} />
-          </Droppable>
-        </>
-      )}
+      <Droppable
+        key={`managers/${id}`}
+        id={`managers/${id}`}
+        disabled={target !== "employee"}
+      >
+        <div style={{ paddingTop: 10, paddingBottom: 10 }}>部門長</div>
+        <EmployeeList employees={managers} />
+      </Droppable>
+      <hr style={{ margin: 0 }} />
+      <Droppable
+        key={`members/${id}`}
+        id={`members/${id}`}
+        disabled={target !== "employee"}
+      >
+        <div style={{ paddingTop: 10, paddingBottom: 10 }}>メンバー</div>
+        <EmployeeList employees={members} />
+      </Droppable>
     </div>
   );
 

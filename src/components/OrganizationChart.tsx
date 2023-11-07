@@ -24,6 +24,7 @@ function renderDepartment({
   members,
   branches,
   collapse,
+  isVisible,
 }: DepartmentProps) {
   return (
     <div key={id} style={{ display: "flex", alignItems: "flex-start" }}>
@@ -35,6 +36,7 @@ function renderDepartment({
         members={members}
         branches={branches}
         collapse={collapse}
+        isVisible={isVisible}
       />
       <div>{branches.map(renderDepartment)}</div>
     </div>
